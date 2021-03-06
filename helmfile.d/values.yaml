@@ -1,0 +1,108 @@
+---
+controller:
+  tag: "2.263.4"
+  sidecars:
+    configAutoReload:
+      resources:
+        limits:
+          cpu: 100m
+          memory: 100Mi
+        requests:
+          cpu: 50m
+          memory: 50Mi
+  ingress:
+    enabled: true
+    hostName: jenkins.apps.lab.local
+  JCasC:
+    authorizationStrategy: |-
+      projectMatrix:
+        permissions:
+          - "Overall/Administer:${chart-admin-username}"
+    configScripts:
+      jenkins-config: |
+        jenkins:
+          noUsageStatistics: true
+  installPlugins:
+    - dashboard-view
+    - cloudbees-folder
+    - configuration-as-code
+    - antisamy-markup-formatter
+    - build-name-setter
+    - build-timeout
+    - config-file-provider
+    - credentials-binding
+    - embeddable-build-status
+    - rebuild
+    - ssh-agent
+    - throttle-concurrents
+    - timestamper
+    - ws-cleanup
+    - ant
+    - gradle
+    - nodejs
+    - cobertura
+    - htmlpublisher
+    - junit
+    - warnings-ng
+    - xunit
+    - workflow-aggregator
+    - github-branch-source
+    - pipeline-github-lib
+    - pipeline-stage-view
+    - conditional-buildstep
+    - jenkins-multijob-plugin
+    - parameterized-trigger
+    - copyartifact
+    - bitbucket
+    - git
+    - git-parameter
+    - github
+    - gitlab-plugin
+    - repo
+    - matrix-project
+    - ssh-slaves
+    - matrix-auth
+    - pam-auth
+    - ldap
+    - role-strategy
+    - active-directory
+    - authorize-project
+    - email-ext
+    - emailext-template
+    - mailer
+    - publish-over-ssh
+    - ssh
+    - locale
+    - kubernetes
+    - kubernetes-credentials-provider
+    - templating-engine
+
+agent:
+  podTemplates:
+    docker: |
+      - name: docker
+        containers:
+          - name: docker
+            image: docker:19.03
+            command: sleep
+            args: 99d
+            volumeMounts:
+              - name: docker-socket
+                mountPath: /var/run
+          - name: docker-daemon
+            image: docker:19.03-dind
+            psecurityContext:
+              privileged: true
+            volumeMounts:
+              - name: docker-socket
+                mountPath: /var/run
+        volumes:
+          - name: docker-socket
+            emptyDir: {}
+
+persistence:
+  enabled: true
+  existingClaim: jenkins-data-claim
+
+rbac:
+  readSecrets: true
