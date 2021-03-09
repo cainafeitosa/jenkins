@@ -1,6 +1,6 @@
 void call() {
   stage("Maven: Compile") {
-    podTemplates(
+    podTemplate(
       containers: [
         containerTemplate(name: 'maven', image: 'maven:3-jdk-8', command: 'sleep', args: '9999999', ttyEnabled: true)
       ]
