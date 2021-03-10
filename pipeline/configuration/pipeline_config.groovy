@@ -3,9 +3,7 @@ jte{
 }
 
 @merge libraries{
-  agent {
-    kubernetes
-  }
+  agent
 }
 
 stages{}

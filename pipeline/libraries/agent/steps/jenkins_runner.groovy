@@ -3,6 +3,7 @@
 void call(Closure body) {
     if (config.kubernetes) {
         def cloud = config.kubernetes.cloud ?: 'kubernetes'
+        println cloud
 
         podTemplate(cloud: cloud, inheritFrom: 'maven') {
             node(POD_LABEL) {
@@ -11,7 +12,7 @@ void call(Closure body) {
         }
     } else {
         def label = config.label ?: ''
-        
+
         node(config.label) {
             body()
         }
