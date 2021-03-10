@@ -2,8 +2,7 @@ jte{
   allow_scm_jenkinsfile = false
 }
 
-libraries{
-  maven
+@merge libraries{
   agent {
     kubernetes {
       cloud = 'kubernetes'
