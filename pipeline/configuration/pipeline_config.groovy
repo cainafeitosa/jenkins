@@ -1,3 +1,5 @@
+allow_scm_jenkinsfile = false
+
 @merge jte{ 
   allow_scm_jenkinsfile = false
 }
