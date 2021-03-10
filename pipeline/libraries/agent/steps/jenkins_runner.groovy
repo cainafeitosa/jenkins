@@ -1,9 +1,8 @@
 #!/usr/bin/env groovy
 
 void call(Closure body) {
-    println config.kubernetes
-
-    if (config.kubernetes != null) {
+    if (config.kubernetes) {
+        println 'Provisioning Jenkins Runner on Kubernetes'
         def cloud = config.kubernetes.cloud ?: 'kubernetes'
 
         podTemplate(cloud: cloud, inheritFrom: 'maven') {
@@ -12,6 +11,7 @@ void call(Closure body) {
             }
         }
     } else {
+        println 'Running'
         def label = config.label ?: ''
 
         node(config.label) {
