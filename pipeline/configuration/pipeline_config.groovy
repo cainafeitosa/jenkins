@@ -3,6 +3,7 @@ jte{
 }
 
 libraries{
+  maven
   agent {
     kubernetes {
       cloud = 'kubernetes'
