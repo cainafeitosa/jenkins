@@ -1,7 +1,7 @@
 #!/usr/bin/env groovy
 
 void call(Closure body) {
-    if (!isNull(config.kubernetes)) {
+    if (config.kubernetes != null) {
         def cloud = config.kubernetes.cloud ?: 'kubernetes'
 
         podTemplate(cloud: cloud, inheritFrom: 'maven') {
