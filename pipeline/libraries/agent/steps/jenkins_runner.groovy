@@ -1,6 +1,17 @@
 #!/usr/bin/env groovy
 
 void call(Closure body) {
-    println config.kubernetes
-    println config.label
+    if (config.kubernetes) {
+        def cloud = config.kubernetes.cloud ?: 'kubernetes'
+        podTemplate(cloud: cloud) {
+            node(POD_LABEL) {
+                body()
+            }
+        }
+    } else {
+        def label = config.label ?: ''
+        node(config.label) {
+            body()
+        }
+    }
 }

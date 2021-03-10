@@ -1,18 +1,19 @@
-allow_scm_jenkinsfile = false
-
-@merge jte{ 
+jte{ 
   allow_scm_jenkinsfile = false
 }
 
-@merge libraries{
+libraries{
   agent {
     kubernetes {
       cloud = 'kubernetes'
     }
-    label = 'master'
   }
 }
 
-stages{} 
+stages{
+  continuous_integration {
+    build
+  }
+}
 application_environments{} 
-keywords{} 
+keywords{}
