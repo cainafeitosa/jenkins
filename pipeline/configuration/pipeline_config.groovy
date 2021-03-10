@@ -10,10 +10,6 @@ libraries{
   }
 }
 
-stages{
-  continuous_integration {
-    build
-  }
-}
+stages{}
 application_environments{} 
 keywords{}
