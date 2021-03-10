@@ -1,6 +1,8 @@
 #!/usr/bin/env groovy
 
 void call(Closure body) {
+    println config.kubernetes
+
     if (config.kubernetes != null) {
         def cloud = config.kubernetes.cloud ?: 'kubernetes'
 
