@@ -1,15 +1,16 @@
-libraries {
-  runner
-  maven
-  docker
-  sonarqube
+@merge jte{ 
+  allow_scm_jenkinsfile = false
 }
 
-stages {
-  continuous_integration {
-    unit_tests
-    package_artifact
-    static_code_analysis
-    build_container_image
+@merge libraries{
+  agent {
+    kubernetes {
+      cloud = 'kubernetes'
+    }
+    label = 'master'
   }
 }
+
+stages{} 
+application_environments{} 
+keywords{} 

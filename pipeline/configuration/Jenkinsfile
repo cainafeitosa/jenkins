@@ -1,1 +1,3 @@
-continuous_integration()
+jenkins_runner {
+    build()
+}
