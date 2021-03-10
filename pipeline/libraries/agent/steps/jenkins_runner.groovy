@@ -1,9 +1,11 @@
 #!/usr/bin/env groovy
 
 void call(Closure body) {
-    if (config.kubernetes) {
+    println config.kubernetes
+    println config.label
+    println config.kubernetes.toBoolean()
+    if (config.kubernetes.toBoolean()) {
         def cloud = config.kubernetes.cloud ?: 'kubernetes'
-        println cloud
 
         podTemplate(cloud: cloud, inheritFrom: 'maven') {
             node(POD_LABEL) {
