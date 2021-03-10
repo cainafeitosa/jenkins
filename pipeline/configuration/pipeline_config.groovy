@@ -4,9 +4,7 @@ jte{
 
 @merge libraries{
   agent {
-    kubernetes {
-      cloud = 'kubernetes'
-    }
+    kubernetes
   }
 }
 
