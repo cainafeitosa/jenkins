@@ -1,6 +1,6 @@
 #!/usr/bin/env grovoy
 
-void checkout() {
+def checkout() {
     defaults = [
         excludedRegions = ''
         includedRegions = ''
