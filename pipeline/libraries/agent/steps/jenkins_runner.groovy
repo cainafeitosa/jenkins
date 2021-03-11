@@ -1,7 +1,6 @@
 #!/usr/bin/env groovy
 
 void call(Closure body) {
-    if (config.kubernetes) {
         println 'Running on Kubernetes'
         
         def cloud = config.kubernetes.cloud ?: 'kubernetes'

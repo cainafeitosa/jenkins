@@ -8,7 +8,6 @@ jte{
       @override podTemplates = 'docker sonar'
     }
   }
-  git
 }
 
 stages{}
