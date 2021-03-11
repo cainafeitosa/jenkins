@@ -6,6 +6,7 @@ void call() {
     }
 
     stage('Maven: Unit Tests') {
+        sh 'env'
         when(!config.skipTests || env.BRANCH == 'develop') {
             try {
                 mvn 'test'

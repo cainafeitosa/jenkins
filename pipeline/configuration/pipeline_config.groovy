@@ -8,9 +8,10 @@ jte {
       @override podTemplates = 'docker sonar'
     }
   }
+  utils
   git
   docker
-  sonarqube 
+  sonarqube
 }
 
 stages{}
