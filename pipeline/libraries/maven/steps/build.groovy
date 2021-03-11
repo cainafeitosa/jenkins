@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 
-void call(Closure body) {
+void call() {
     if (pipelineConfig.libraries.agent.kubernetes) {
         container('maven') {
             compile()
