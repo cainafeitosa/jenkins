@@ -6,8 +6,13 @@ void call() {
     }
 
     stage('Maven: Unit Tests') {
-        mvn 'test'
-        junit allowEmptyResults: true, skipPublishingChecks: true, testResults: '**/target/surefire-reports/TEST-*.xml'
+        when(!config.skipTests || env.BRANCH == 'develop') {
+            try {
+                mvn 'test'
+            } finnaly {
+                junit allowEmptyResults: true, skipPublishingChecks: true, testResults: '**/target/surefire-reports/TEST-*.xml'
+            }
+        }
     }
 
     stage('Maven: Package') {
