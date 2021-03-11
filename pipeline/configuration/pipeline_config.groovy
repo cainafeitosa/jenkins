@@ -8,9 +8,7 @@ jte {
       @override podTemplates = 'docker sonar'
     }
   }
-  git {
-    excludedMessage = '^(?s)\\[maven-release-plugin\\].*'
-  }
+  git
   docker
   sonarqube 
 }
