@@ -2,8 +2,7 @@
 
 void call(Closure body) {
     stage('Maven: Compile') {
-        println pipelineConfig
-        if (config.kubernetes) {
+        if (pipelineConfig.agent.kubernetes) {
             container('maven') {
                 sh 'mvn -B clean compile'
             }
