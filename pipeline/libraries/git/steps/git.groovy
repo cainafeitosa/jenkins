@@ -1,5 +1,7 @@
 #!/usr/bin/env groovy
 
+package libraries.git
+
 void checkout() {
     defaults = [
         excludedMessage = ''

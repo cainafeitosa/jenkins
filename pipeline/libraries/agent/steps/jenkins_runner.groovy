@@ -16,8 +16,7 @@ void call(Closure body) {
         podTemplate(cloud: cloud, inheritFrom: podTemplates) {
             node(POD_LABEL) {
                 stage('Checkout SCM') {
-                    println scm
-                    println env
+                    git.checkout()
                 }
                 body()
             }
