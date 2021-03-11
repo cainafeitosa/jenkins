@@ -11,14 +11,6 @@ void checkout() {
     def excludedRegions = config.excludedRegions ?: defaults.excludedRegions
     def includedRegions = config.includedRegions ?: defaults.includedRegions
 
-    checkout([
-        $class: 'GitSCM',
-        branches: scm.branches,
-        extensions: [
-            [$class: 'MessageExclusion', excludedMessage: excludedMessage],
-            [$class: 'LocalBranch'],
-            [$class: 'PathRestriction', excludedRegions: excludedRegions, includedRegions: includedRegions]
-        ],
-        userRemoteConfigs: scm.userRemoteConfigs
-    ])
+    println scm
+    println env
 }
