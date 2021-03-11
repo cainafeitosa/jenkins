@@ -11,5 +11,7 @@ void call() {
 
     stage('Maven: Package') {
         mvn '-DskipTests install'
+        junit '**/target/surefire-reports/*.xml'
+        archiveArtifacts 'target/*.jar'
     }
 }

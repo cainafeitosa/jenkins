@@ -1,5 +1,5 @@
 jenkins_runner {
     build()
-    static_analysis_code()
+    static_code_analysis()
     build_container_image()
 }
