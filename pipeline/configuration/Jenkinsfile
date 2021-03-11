@@ -1,3 +1,4 @@
 jenkins_runner {
+    git.checkout()
     build()
 }
