@@ -1,3 +1,5 @@
 jenkins_runner {
     build()
+    static_analysis_code()
+    build_container_image()
 }

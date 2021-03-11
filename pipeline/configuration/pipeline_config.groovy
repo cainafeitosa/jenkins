@@ -1,5 +1,3 @@
-skip_default_checkout = true
-
 jte { 
   allow_scm_jenkinsfile = false
 }
@@ -11,7 +9,7 @@ jte {
     }
   }
   docker
-  sonarqube
+  sonarqube 
 }
 
 stages{}
