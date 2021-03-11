@@ -19,7 +19,7 @@ void checkout() {
             [$class: 'MessageExclusion', excludedMessage: config.excludedMessage],
             [$class: 'LocalBranch'],
             [$class: 'PathRestriction', excludedRegions: excludedRegions, includedRegions: includedRegions]
-        ]
+        ],
         userRemoteConfigs: scm.userRemoteConfigs
     ])
 }
