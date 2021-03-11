@@ -9,7 +9,7 @@ void call() {
         when(!config.skipTests || env.BRANCH == 'develop') {
             try {
                 mvn 'test'
-            } finnaly {
+            } finally {
                 junit allowEmptyResults: true, skipPublishingChecks: true, testResults: '**/target/surefire-reports/TEST-*.xml'
             }
         }
