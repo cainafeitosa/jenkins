@@ -9,6 +9,9 @@ void call(Closure body) {
 
         podTemplate(cloud: cloud, inheritFrom: podTemplates) {
             node(POD_LABEL) {
+                stage('Checkout SCM') {
+                    checkout scm
+                }
                 body()
             }
         }
@@ -18,6 +21,9 @@ void call(Closure body) {
         def label = config.label ?: ''
 
         node(config.label) {
+            stage('Checkout SCM') {
+                checkout scm
+            }
             body()
         }
     }
