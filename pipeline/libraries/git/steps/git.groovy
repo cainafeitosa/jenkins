@@ -1,22 +1,21 @@
-#!/usr/bin/env grovoy
+#!/usr/bin/env groovy
 
-def checkout() {
+void checkout() {
     defaults = [
+        excludedMessage = ''
         excludedRegions = ''
         includedRegions = ''
     ]
 
+    def excludedMessage = config.excludedMessage ?: defaults.excludedMessage
     def excludedRegions = config.excludedRegions ?: defaults.excludedRegions
     def includedRegions = config.includedRegions ?: defaults.includedRegions
-
-    println env
-    println scm
 
     checkout([
         $class: 'GitSCM',
         branches: scm.branches,
         extensions: [
-            [$class: 'MessageExclusion', excludedMessage: config.excludedMessage],
+            [$class: 'MessageExclusion', excludedMessage: excludedMessage],
             [$class: 'LocalBranch'],
             [$class: 'PathRestriction', excludedRegions: excludedRegions, includedRegions: includedRegions]
         ],
