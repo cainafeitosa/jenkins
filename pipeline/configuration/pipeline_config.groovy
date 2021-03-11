@@ -3,7 +3,11 @@ jte{
 }
 
 @merge libraries{
-  agent
+  agent {
+    kubernetes {
+      @override podTemplates = 'docker sonar'
+    }
+  }
 }
 
 stages{}

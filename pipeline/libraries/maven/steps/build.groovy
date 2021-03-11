@@ -2,6 +2,10 @@
 
 void call(Closure body) {
     stage('Maven: Compile') {
-        println 'mvn -B compile'
+        if (config.kubernetes) {
+            container('maven') {
+                sh 'mvn -B clean compile'
+            }
+        }
     }
 }

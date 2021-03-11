@@ -2,16 +2,19 @@
 
 void call(Closure body) {
     if (config.kubernetes) {
-        println 'Provisioning Jenkins Runner on Kubernetes'
+        println 'Running on Kubernetes'
+        
         def cloud = config.kubernetes.cloud ?: 'kubernetes'
+        def podTemplates = config.kubernetes.podTemplates ?: ''
 
-        podTemplate(cloud: cloud, inheritFrom: 'maven') {
+        podTemplate(cloud: cloud, inheritFrom: podTemplates) {
             node(POD_LABEL) {
                 body()
             }
         }
     } else {
-        println 'Running'
+        println 'Running on Node'
+
         def label = config.label ?: ''
 
         node(config.label) {
