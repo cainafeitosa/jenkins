@@ -1,35 +1,25 @@
 #!/usr/bin/env groovy
 
-void call(Closure body) {
-    defaults = [
+void call(body) {
+    def defaults = [
         cloud: 'kubernetes',
-        podTemplates: '',
+        pod_templates: '',
         label: ''
     ]
 
-    if (config.kubernetes) {
-        println 'Running on Kubernetes'
-        
+    if(config.kubernetes) {
         def cloud = config.kubernetes.cloud ?: defaults.cloud
-        def podTemplates = config.kubernetes.podTemplates ?: defaults.podTemplates
+        def podTemplates = config.kubernetes.pod_templates ?: defaults.pod_templates
 
         podTemplate(cloud: cloud, inheritFrom: podTemplates) {
             node(POD_LABEL) {
-                stage('Checkout SCM') {
-                    git.checkout()
-                }
                 body()
             }
         }
     } else {
-        println 'Running on Node'
-
         def label = config.label ?: defaults.label
 
-        node(config.label) {
-            stage('Checkout SCM') {
-                git.checkout()
-            }
+        node(label) {
             body()
         }
     }

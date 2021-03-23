@@ -1,15 +1,20 @@
 #!/usr/bin/env groovy
 
-void call(String params = '') {
+void call(params = '') {
+    def workDir = config.work_dir ?: '.'
     def commandLine = "mvn -B -e -V ${params}"
 
-    if (pipelineConfig.libraries.agent.kubernetes) {
+    if(pipelineConfig.libraries?.agent?.kubernetes) {
         container('maven') {
-            sh "${commandLine}"
+            dir(workDir) {
+                sh "${commandline}"
+            }
         }
     } else {
-        withMaven(maven: config.mvnTool, jdk: config.jdkTool) {
-            sh "${commandLine}"
+        withMaven(maven: config.mvn_tool, jdk: config.jdk_tool) {
+            dir(workDir) {
+                sh "${commandLine}"
+            }
         }
     }
 }

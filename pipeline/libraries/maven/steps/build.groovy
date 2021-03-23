@@ -6,8 +6,7 @@ void call() {
     }
 
     stage('Maven: Unit Tests') {
-        sh 'env'
-        when(!config.skipTests || env.BRANCH == 'develop') {
+        when(!config.skip_tests) {
             try {
                 mvn 'test'
             } finally {
@@ -18,6 +17,5 @@ void call() {
 
     stage('Maven: Package') {
         mvn '-DskipTests install'
-        archiveArtifacts 'target/*.jar'
     }
 }

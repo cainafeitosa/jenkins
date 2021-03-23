@@ -1,4 +1,5 @@
 jenkins_runner {
+    code_checkout()
     build()
     static_code_analysis()
     build_container_image()
