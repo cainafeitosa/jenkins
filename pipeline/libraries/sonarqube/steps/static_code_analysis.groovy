@@ -14,7 +14,7 @@ def call() {
         cli_parameters: []
     ]
 
-    Boolean enableSonarQubeAnalysis = config.enabled != null ?: defaults.enabled
+    def enableSonarQubeAnalysis = (config.enabled != null) ? config.enabled : defaults.enabled
     def wait = config.wait_for_quality_gate ?: defaults.wait_for_quality_gate
     def enforce = config.enforce_quality_gate ?: defaults.enforce_quality_gate
     def installationName = config.installation_name ?: defaults.installation_name
