@@ -35,9 +35,10 @@ releases:
             - configuration-as-code:1.47
             - matrix-auth:2.6.6
             - kubernetes-credentials-provider:0.17
-            - multibranch-scan-webhook-trigger:1.0.5s
+            - multibranch-scan-webhook-trigger:1.0.5
             - generic-webhook-trigger:1.72
             - templating-engine:2.0.4
+            - docker-workflow:1.26
             - sonar:2.13
         agent:
           enabled: true

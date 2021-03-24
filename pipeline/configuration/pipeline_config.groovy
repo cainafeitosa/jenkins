@@ -1,20 +1,8 @@
-jte { 
+@merge jte {
 	allow_scm_jenkinsfile = false
 }
 
-@merge libraries {
-	agent {
-		kubernetes {
-			@override pod_templates = 'docker sonar'
-		}
-	}
-	git
-	utils
-	sonarqube {
-		@override enabled = true
-	}
-	docker
-}
+@merge libraries {}
 
 application_environments {
 	dev {

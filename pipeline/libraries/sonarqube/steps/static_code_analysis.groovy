@@ -22,7 +22,7 @@ def call() {
     def timeoutUnit = config.timeout_unit ?: defaults.timeout_unit
     def unstashList = config.unstash ?: defaults.unstash
 
-    stage('SonarQube analysis') {
+    stage('SonarQube Analysis') {
         when(enableSonarQubeAnalysis) {
             validateInstallationExists(installationName)
 

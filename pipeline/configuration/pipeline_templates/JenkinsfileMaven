@@ -1,0 +1,22 @@
+pipeline {
+  agent {
+    kubernetes {
+      cloud 'kubernetes'
+      containerTemplate {
+        name 'maven'
+        image 'maven:-jdk-8-alpine'
+      }
+    }
+  }
+  stages {
+    stage('Maven: Compile') {
+      steps {
+        echo pipelineConfig
+        container('maven') {
+          sh 'pwd'
+          sh 'ls -l'
+        }
+      }
+    }
+  }
+}
