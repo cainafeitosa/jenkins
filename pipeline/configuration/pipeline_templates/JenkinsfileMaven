@@ -22,7 +22,6 @@ pipeline {
   stages {
     stage('Maven: Compile') {
       steps {
-        echo pipelineConfig
         container('maven') {
           sh 'pwd'
           sh 'ls -l'
