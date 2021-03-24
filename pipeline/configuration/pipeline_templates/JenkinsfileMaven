@@ -1,32 +1,29 @@
-pipeline {
-  agent {
-    kubernetes {
-      cloud 'kubernetes'
-      yaml """\
-        apiVersion: v1
-        kind: Pod
-        metadata:
-          labels:
-            jenkins/jenkins-jenkins-agent: "true"
-        spec:
-          containers:
-          - name: maven
-            image: maven:3-jdk-8-alpine
-            command: 
-            - "sleep"
-            args:
-            - "9999999"
-      """.stripIndent()
+podTemplate(cloud: 'kubernetes', inheritFrom: 'docker') {
+  node(POD_LABEL) {
+    stage('Checkout SCM') {
+      checkout_scm()
     }
-  }
-  stages {
+
     stage('Maven: Compile') {
-      steps {
-        container('maven') {
-          sh 'pwd'
-          sh 'ls -l'
-        }
-      }
+      println pipelineConfig
     }
+
+    // stage('Maven: Unit Test') {
+    //   when(! pipelineConfig.workflow.skip_unit_test) {
+    //     mvn.test()
+    //   }
+    // }
+
+    // stage('Maven: Package') {
+    //   mvn.package()
+    // }
+
+    // stage('Docker: Build Image') {
+    //   docker.build()
+    // }
+
+    // stage('Docker: Build Push') {
+    //   docker.push()
+    // }
   }
 }
