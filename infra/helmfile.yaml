@@ -9,7 +9,13 @@ releases:
     chart: jenkins/jenkins
     values:
       - controller:
-          tag: "2.263.4-lts"
+          tag: "2.277.1-lts"
+          javaOpts: >-
+            -Xms32m -Xmx512m
+            -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Dsun.zip.disableMemoryMapping=true
+            -XX:+UseParallelGC -XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=10 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90
+          JCasC:
+            defaultConfig: true
           sidecars:
             configAutoReload:
               resources:
@@ -23,19 +29,59 @@ releases:
             enabled: true
             hostName: jenkins.apps.lab.local
           installPlugins:
-            - kubernetes
-            - workflow-aggregator
-            - git
-            - configuration-as-code
-            - dashboard-view
-            - kubernetes-credentials-provider
-            - templating-engine
-        
+            - kubernetes:1.29.2
+            - workflow-aggregator:2.6
+            - git:4.7.0
+            - configuration-as-code:1.47
+            - matrix-auth:2.6.6
+            - kubernetes-credentials-provider:0.17
+            - multibranch-scan-webhook-trigger:1.0.5s
+            - generic-webhook-trigger:1.72
+            - templating-engine:2.0.4
+            - sonar:2.13
+        agent:
+          enabled: true
+          image: jenkins/inbound-agent
+          tag: 4.6-1
+          workingDir: "/home/jenkins/agent"
+          podTemplates:
+            docker: |-
+              - name: "docker"
+                label: "jenkins-docker"
+                containers:
+                  - name: "docker"
+                    image: "docker:19.03"
+                    workingDir: "/home/jenkins/agent"
+                    command: "sleep"
+                    args: "9999999"
+                  - name: "docker-daemon"
+                    image: "docker:19.03-dind"
+                    workingDir: "/home/jenkins/agent"
+                    command: "sleep"
+                    args: "9999999"
+                    privileged: true
+                volumes:
+                  - emptyDirVolume:
+                      memory: false
+                      mountPath: "/var/run"
+            maven-jdk-8: |-
+              - name: "maven-jdk-8"
+                label: "jenkins-maven"
+                containers:
+                  - name: "maven"
+                    image: "maven:3-jdk-8-alpine"
+                    workingDir: "/home/jenkins/agent"
+                    command: "sleep"
+                    args: "9999999"
+                volumes:
+                  - persistentVolumeClaim:
+                      claimName: "maven-repo"
+                      mountPath: "/root/.m2/repository"
+                      readOnly: false
         persistence:
           enabled: true
           storageClass: local-storage
-          accessMode: "ReadWriteOnce"
           size: "10Gi"
-        
+          accessMode: ReadWriteOnce
         rbac:
           readSecrets: true

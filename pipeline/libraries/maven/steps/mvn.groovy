@@ -7,7 +7,7 @@ void call(params = '') {
     if(pipelineConfig.libraries?.agent?.kubernetes) {
         container('maven') {
             dir(workDir) {
-                sh "${commandline}"
+                sh "${commandLine}"
             }
         }
     } else {
