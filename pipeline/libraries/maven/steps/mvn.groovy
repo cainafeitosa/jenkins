@@ -4,17 +4,17 @@ void call(Map args) {
     def commandLine = "mvn -B -e -V"
     def actions = [
         "compile": { mvnArgs ->
-            sh "${commandLine} ${mvnArgs} clean compile"
+            sh "${commandLine} ${mvnArgs ?: ""} clean compile"
         },
         "test": { mvnArgs ->
             try {
-                sh "${commandLine} ${mvnArgs} test"
+                sh "${commandLine} ${mvnArgs ?: ""} test"
             } finally {
                 junit allowEmptyResults: true, skipPublishingChecks: true, testResults: '**/target/surefire-reports/TEST-*.xml'
             }
         },
         "install": { mvnArgs ->
-            sh "${commandLine} ${mvnArgs} install"
+            sh "${commandLine} ${mvnArgs ?: ""} install"
         }
     ]
 
