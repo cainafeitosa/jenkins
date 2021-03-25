@@ -2,7 +2,9 @@
 	allow_scm_jenkinsfile = false
 }
 
-@merge libraries {}
+@merge libraries {
+	utils
+}
 
 application_environments {
 	dev {
