@@ -2,7 +2,17 @@
 	allow_scm_jenkinsfile = false
 }
 
-@merge libraries {}
+@merge libraries {
+	git
+    kubernetes_agent {
+        cloud = "kubernetes"
+    }
+    docker {
+        runs_on = "docker"
+        registry = "https://registry.apps.lab.local"
+        credentials_id = "nexus-credential"
+    }
+}
 
 application_environments {
 	dev {
@@ -21,4 +31,10 @@ keywords{
 	develop =  /^[Dd]evelop(ment|er|)$/
 	hotfix  =  /^[Hh]ot[Ff]ix-/
 	release =  /^[Rr]elease-(\d+.)*\d$/
+}
+
+@merge stages {
+    continuous_integration {
+        checkout_scm
+    }
 }
