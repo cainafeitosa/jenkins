@@ -41,6 +41,7 @@ releases:
             - docker-workflow:1.26
             - sonar:2.13
             - multibranch-build-strategy-extension:1.0.10
+            - ws-cleanup:0.39
         agent:
           enabled: true
           image: jenkins/inbound-agent

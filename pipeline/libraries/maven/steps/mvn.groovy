@@ -8,7 +8,7 @@ void call(String args) {
 
         podTemplate(cloud: cloud, inheritFrom: config.runs_on.kubernetes.pod_template) {
             node(POD_LABEL) {
-                container(config.runs_on) {
+                container("maven") {
                     sh commandLine
                 }
             }
