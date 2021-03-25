@@ -1,2 +1,5 @@
-unit_test()
-build()
+jenkins_runner {
+    stage("Teste") {
+        println 'Hello'
+    }
+}

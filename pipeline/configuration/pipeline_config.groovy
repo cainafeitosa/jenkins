@@ -3,7 +3,7 @@
 }
 
 @merge libraries {
-	utils
+	kubernetes_agent
 }
 
 application_environments {
