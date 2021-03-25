@@ -1,22 +1,30 @@
-podTemplate(cloud: 'kubernetes', inheritFrom: 'docker') {
+#!/usr/bin/env groovy
+
+podTemplate(cloud: 'kubernetes', inheritFrom: 'maven-jdk-8') {
   node(POD_LABEL) {
     stage('Checkout SCM') {
       checkout_scm()
     }
 
     stage('Maven: Compile') {
-      println pipelineConfig
+      container('maven') {
+        mvn("compile")
+      }
     }
 
-    // stage('Maven: Unit Test') {
-    //   when(! pipelineConfig.workflow.skip_unit_test) {
-    //     mvn.test()
-    //   }
-    // }
+    stage('Maven: Unit Test') {
+      when(! pipelineConfig?.workflow?.skip_unit_test) {
+        container('maven') {
+          mvn("test")
+        }
+      }
+    }
 
-    // stage('Maven: Package') {
-    //   mvn.package()
-    // }
+    stage('Maven: Install') {
+      container('maven') {
+        mvn("package": "-DskipTests")
+      }
+    }
 
     // stage('Docker: Build Image') {
     //   docker.build()

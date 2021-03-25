@@ -1,20 +1,34 @@
 #!/usr/bin/env groovy
 
-void call(params = '') {
-    def workDir = config.work_dir ?: '.'
-    def commandLine = "mvn -B -e -V ${params}"
+void call(Map args) {
+    def commandLine = "mvn -B -e -V"
+    def actions = [
+        "compile": { mvnArgs ->
+            sh "${commandLine} ${mvnArgs} clean compile"
+        },
+        "test": { mvnArgs ->
+            try {
+                sh "${commandLine} ${mvnArgs} test"
+            } finally {
+                junit allowEmptyResults: true, skipPublishingChecks: true, testResults: '**/target/surefire-reports/TEST-*.xml'
+            }
+        },
+        "install": { mvnArgs ->
+            sh "${commandLine} ${mvnArgs} install"
+        }
+    ]
 
-    if(pipelineConfig.libraries?.agent?.kubernetes) {
-        container('maven') {
-            dir(workDir) {
-                sh "${commandLine}"
-            }
-        }
-    } else {
-        withMaven(maven: config.mvn_tool, jdk: config.jdk_tool) {
-            dir(workDir) {
-                sh "${commandLine}"
-            }
-        }
+    args.each{ action, value ->
+        def c = actions.get(action)
+        c.resolveStrategy = Closure.DELEGATE_FIRST
+        c.delegate = this        
+        c.call(value)
     }
+}
+
+void call(String action){
+    String a = action.toString()
+    this.call([
+        (a): null
+    ])
 }
