@@ -40,6 +40,7 @@ releases:
             - templating-engine:2.0.4
             - docker-workflow:1.26
             - sonar:2.13
+            - multibranch-build-strategy-extension:1.0.10
         agent:
           enabled: true
           image: jenkins/inbound-agent
@@ -58,8 +59,6 @@ releases:
                   - name: "docker-daemon"
                     image: "docker:19.03-dind"
                     workingDir: "/home/jenkins/agent"
-                    command: "sleep"
-                    args: "9999999"
                     privileged: true
                 volumes:
                   - emptyDirVolume:

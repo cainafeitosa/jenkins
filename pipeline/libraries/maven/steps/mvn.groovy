@@ -1,31 +1,34 @@
 #!/usr/bin/env groovy
 
-void call(String mavenOpts, String mavenPhase) {
-    def commandLine = "mvn -B -e -V ${mavenOpts}"
-    def testResultsPath = config.test_results_path ?: '**/target/surefire-reports/TEST-*.xml'
-    def mavenPhases = [
-        "compile": {
-            sh "${commandLine} compile"
-        },
-        "test": {
-            try {
-                sh "${commandLine} test"
-            } finally {
-                junit allowEmptyResults: true, skipPublishingChecks: true, testResults: testResultsPath
-            }
-        },
-        "install": {
-            sh "${commandLine} install"
-        }
-    ]
+void call(String args) {
+    def commandLine = "mvn -B ${config.cli_options ?: ""} ${args}"
 
-    def c = mavenPhases.get(mavenPhase)
-    c.resolveStrategy = Closure.DELEGATE_FIRST
-    c.delegate = this        
-    c.call()
+    if (config?.runs_on?.kubernetes) {
+        def cloud = config.runs_on.kubernetes?.cloud ?: "kubernetes"
+
+        podTemplate(cloud: cloud, inheritFrom: config.runs_on.kubernetes.pod_template) {
+            node(POD_LABEL) {
+                container(config.runs_on) {
+                    sh commandLine
+                }
+            }
+        }
+    } else {
+        def nodeLabel = config?.runs_on?.node?.label ?: ""
+        
+        node(nodeLabel) {
+            withMaven(maven: config.mvn_installation, jdk: config.jdk_installation) {
+                sh commandLine
+            }
+        }
+    }
 }
 
-void call(String mavenPhase) {
-    String mavenOpts = ''
-    this.call(mavenOpts, mavenPhase)
+@Validate
+void call() {
+    if (config?.runs_on?.kubernetes) {
+        if (! config.runs_on.kubernetes.pod_template) {
+            error "Library parameter runs_on.kubernetes.pod_template is undefined"
+        }
+    }
 }
