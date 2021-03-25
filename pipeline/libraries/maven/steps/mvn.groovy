@@ -19,11 +19,6 @@ void call(String mavenOpts, String mavenPhase) {
         }
     ]
 
-    invalidPhase = mavenPhase.findAll{ !(it.getKey() in mavenPhases.keySet()) }
-    if (invalidPhase) error "Unknown maven phase: ${invalidPhase.collect{ it.getKey() }.join(", ")}"
-  
-    if (!(mavenPhase.subMap(mavenPhases.keySet()))) error "maven: You must use an phase: ${mavenPhases.keySet().join(", ")}"
-
     def c = mavenPhases.get(mavenPhase)
     c.resolveStrategy = Closure.DELEGATE_FIRST
     c.delegate = this        
