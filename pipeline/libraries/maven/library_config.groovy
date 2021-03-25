@@ -2,12 +2,7 @@
 
 fields {
   	optional {
-		runs_on {
-			kubernetes {
-				cloud = String
-				pod_template = String
-			}
-		}
+		runs_on = String
 		cli_options = String
 		test_results_path = String
   	}

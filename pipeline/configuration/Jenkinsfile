@@ -1,5 +1,5 @@
 jenkins_runner {
-    stage("Teste") {
-        println 'Hello'
-    }
+    checkout_scm()
+    unit_test()
+    build()
 }
