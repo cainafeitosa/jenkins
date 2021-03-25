@@ -1,5 +1,4 @@
 jenkins_runner {
-    checkout_scm()
     continuous_integration() 
     build_container_image()
 }
