@@ -2,7 +2,7 @@
 
 import hudson.AbortException
 
-void call(){
+void call() {
     stage("Checkout SCM") {
         cleanWs()
         try {
