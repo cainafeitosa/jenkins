@@ -12,7 +12,7 @@ podTemplate(cloud: "kubernetes", inheritFrom: "maven-jdk-8") {
       }
     }
 
-    stage("Maven: Unit Test") {
+    stage("Maven: Test") {
       when(! pipelineConfig?.workflow?.skip_unit_test) {
         container("maven") {
           mvn("test")
@@ -26,12 +26,17 @@ podTemplate(cloud: "kubernetes", inheritFrom: "maven-jdk-8") {
       }
     }
 
-    // stage("Docker: Build Image") {
-    //   docker.build()
-    // }
+    stage("Docker: Build") {
+      container("docker") {
+        builtImage = docker.build()
+        println builtImage.getClass()
+      }
+    }
 
-    // stage("Docker: Build Push") {
-    //   docker.push()
+    // stage("Docker: Push") {
+    //   container("docker") {
+    //     docker.push(builtImage)
+    //   }
     // }
   }
 }
