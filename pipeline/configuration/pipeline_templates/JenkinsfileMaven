@@ -22,7 +22,7 @@ podTemplate(cloud: "kubernetes", inheritFrom: "maven-jdk-8 docker") {
 
     stage("Maven: Install") {
       container("maven") {
-        mvn("-DskipTests", "install")
+        mvn("-DskipTests -Dmaven.test.skip=true", "install")
       }
     }
 
