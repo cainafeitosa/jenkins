@@ -3,6 +3,7 @@
 import hudson.AbortException
 
 void call() {
+
     stage("Checkout SCM") {
         cleanWs()
         try {
@@ -15,4 +16,5 @@ void call() {
     
         stash name: 'workspace', allowEmpty: true, useDefaultExcludes: false
     }
+    
 }

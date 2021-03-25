@@ -1,6 +1,7 @@
 #!/usr/bin/env groovy
 
 void call() {
+
     def imageName = config.image_repository ? "${config.image_repository}/${config.image_name}" : config.image_name
     def dockerfile = config.dockerfile ?: "Dockerfile"
     def contextPath = config.context_path ?: "."
@@ -14,16 +15,17 @@ void call() {
         withDocker {
             docker.withRegistry(config.registry, config.credentials_id) {
                 def builtImage = docker.build(imageName, buildOpts)
-                def shortCommit = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
 
-                builtImage.push("${env.BUILD_NUMBER}-${shortCommit}")
+                builtImage.push("${env.BUILD_NUMBER}-${env.GIT_COMMIT_SHORT_SHA}")
                 builtImage.push('latest')
             }
         }
     }
+
 }
 
 private void withDocker(Closure body) {
+
     if (config?.runs_on) {
         container("docker") {
             body()
@@ -33,10 +35,12 @@ private void withDocker(Closure body) {
             body()
         }
     }
+
 }
 
 @Validate
 void validate_docker_build() {
+
     if (!config.containsKey("build_args")) {
         return 
     }
@@ -44,4 +48,5 @@ void validate_docker_build() {
     if (!(config.build_args instanceof Map)) {
         error "docker library 'build_args' is a ${config.build_args.getClass()} when a block was expected"
     }
+
 }

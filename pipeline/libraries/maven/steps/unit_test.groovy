@@ -1,6 +1,7 @@
 #!/usr/bin/env groovy
 
 void call() {
+
     def testResultsPath = config.test_results_path ?: "**/target/surefire-reports/TEST-*.xml"
     
     stage("Maven: Unit Tests") {
@@ -10,4 +11,5 @@ void call() {
             junit allowEmptyResults: true, skipPublishingChecks: true, testResults: testResultsPath
         }
     }
+
 }

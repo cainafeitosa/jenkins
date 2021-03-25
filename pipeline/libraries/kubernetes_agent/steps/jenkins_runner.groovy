@@ -1,6 +1,7 @@
 #!/usr/bin/env groovy
 
 void call(Closure body) {
+
     def cloud = config.cloud ?: "kubernetes"
     def podTemplates = pipelineConfig.libraries.findAll { library, config ->
         config?.runs_on
@@ -13,4 +14,5 @@ void call(Closure body) {
             body()
         }
     }
+    
 }
