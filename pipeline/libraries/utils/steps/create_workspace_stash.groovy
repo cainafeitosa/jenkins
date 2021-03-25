@@ -2,7 +2,7 @@
 
 import hudson.AbortException
 
-@Validate
+@Init
 void call(){
     node {
         stage("Checkout SCM") {
