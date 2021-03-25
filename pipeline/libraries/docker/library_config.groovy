@@ -2,6 +2,7 @@
 
 fields {
   	optional {
+        runs_on = String
 		image_repository = String
         dockerfile = String
         context_path = String
