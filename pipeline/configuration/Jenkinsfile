@@ -1,5 +1,6 @@
 jenkins_runner {
     checkout_scm()
     unit_test()
-    build()
+    build_artifact() 
+    build_container_image()
 }

@@ -1,10 +1,32 @@
 #!/usr/bin/env groovy
 
-def call() {
+void call() {
     def imageName = config.image_repository ? "${config.image_repository}/${config.image_name}" : config.image_name
     def dockerfile = config.dockerfile ?: "Dockerfile"
     def contextPath = config.context_path ?: "."
-    def buildArgs = config.build_args ? "${config.build_args} -f ${dockerfile} ${contextPath}" : "-f ${dockerfile} ${contextPath}"
+    def buildArgs = []
+    config.build_args.each { argument, value ->
+        buildArgs << "--build-arg ${argument}='${value}'"
+    }
+    def buildOpts = "${buildArgs.join(" ")} -f ${dockerfile} ${contextPath}"
 
-    docker.build(imageName, buildArgs)
+    def builtImage = docker.build(imageName, buildOpts)
+
+    docker.withRegistry(config.registry, config.credentials_id) {
+        def shortCommit = sh(returnStdout: true, script: "git rev-parse --short HEAD").trim()
+        builtImage.push("${env.BUILD_NUMBER}-${shortCommit}")
+        builtImage.push('latest')
+    }
+}
+
+
+@Validate
+void validate_docker_build(){
+    if(!config.containsKey("build_args")){
+        return 
+    }
+
+    if(!(config.build_args instanceof Map)){
+        error "docker library 'build_args' is a ${config.build_args.getClass()} when a block was expected"
+    }
 }

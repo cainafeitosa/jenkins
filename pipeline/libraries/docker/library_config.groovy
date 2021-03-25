@@ -5,7 +5,6 @@ fields {
 		image_repository = String
         dockerfile = String
         context_path = String
-        build_args = String
   	}
     required {
         registry = String
