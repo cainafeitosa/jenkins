@@ -1,34 +1,30 @@
 #!/usr/bin/env groovy
 
-void call(Map args) {
-    def commandLine = "mvn -B -e -V"
-    def actions = [
-        "compile": { mvnArgs ->
-            sh "${commandLine} ${mvnArgs ?: ""} clean compile"
+void call(String mavenOpts, String mavenPhase) {
+    def commandLine = "mvn -B -e -V ${mavenOpts}"
+    
+    def mavenPhases = [
+        "compile": {
+            sh "${commandLine} compile"
         },
-        "test": { mvnArgs ->
+        "test": {
             try {
-                sh "${commandLine} ${mvnArgs ?: ""} test"
+                sh "${commandLine} test"
             } finally {
                 junit allowEmptyResults: true, skipPublishingChecks: true, testResults: '**/target/surefire-reports/TEST-*.xml'
             }
         },
-        "install": { mvnArgs ->
-            sh "${commandLine} ${mvnArgs ?: ""} install"
+        "install": {
+            sh "${commandLine} install"
         }
     ]
 
-    args.each{ action, value ->
-        def c = actions.get(action)
-        c.resolveStrategy = Closure.DELEGATE_FIRST
-        c.delegate = this        
-        c.call(value)
-    }
+    def c = mavenPhases.get(mavenPhase)
+    c.resolveStrategy = Closure.DELEGATE_FIRST
+    c.delegate = this        
+    c.call()
 }
 
-void call(String action){
-    String a = action.toString()
-    this.call([
-        (a): null
-    ])
+void call(String mavenPhase){
+    this.call(mavenOpts = "", mavenPhase)
 }
