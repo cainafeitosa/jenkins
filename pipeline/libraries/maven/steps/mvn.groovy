@@ -25,6 +25,7 @@ void call(String mavenOpts, String mavenPhase) {
     c.call()
 }
 
-void call(String mavenPhase){
-    this.call(mavenOpts = "", mavenPhase)
+void call(String mavenPhase) {
+    String mavenOpts = ''
+    this.call(mavenOpts, mavenPhase)
 }
