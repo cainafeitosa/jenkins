@@ -5,7 +5,7 @@ void call(Closure body) {
     println jte.libraries
     println pipelineConfig
 
-    podTemplate(cloud: cloud, inheritFrom: ) {
+    podTemplate(cloud: cloud, inheritFrom: '') {
         node(POD_LABEL) {
             body()
         }
