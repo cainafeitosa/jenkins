@@ -7,7 +7,7 @@
     kubernetes_agent {
         cloud = "kubernetes"
     }
-    docker {
+    @merge docker {
         runs_on = "docker"
         registry = "https://registry.apps.lab.local"
         credentials_id = "nexus-credential"
@@ -34,7 +34,7 @@ keywords{
 }
 
 @merge stages {
-    continuous_integration {
+    @merge continuous_integration {
         checkout_scm
     }
 }
