@@ -1,13 +1,12 @@
 #!/usr/bin/env groovy
 
-@Init
 void call(){
 
-    try { unstash "workspace" }
-    catch(ignored) { 
-        println "'workspace' stash not present. Skipping git library environment variable initialization. To change this behavior, ensure the 'checkout_scm' step is called"
-        return
-    }
+    // try { unstash "workspace" }
+    // catch(ignored) { 
+    //     println "'workspace' stash not present. Skipping git library environment variable initialization. To change this behavior, ensure the 'checkout_scm' step is called"
+    //     return
+    // }
 
     env.GIT_URL = scm.getUserRemoteConfigs()[0].getUrl()
     env.GIT_CREDENTIAL_ID = scm.getUserRemoteConfigs()[0].credentialsId.toString()
