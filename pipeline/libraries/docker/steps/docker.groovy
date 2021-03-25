@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 
-def build(String buildArgs) {
+def build() {
     def imageName = config.image_repository ? "${config.image_repository}/${config.image_name}" : config.image_name
     def dockerfile = config.dockerfile ?: "Dockerfile"
     def contextPath = config.context_path ?: "."
