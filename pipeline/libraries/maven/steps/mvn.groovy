@@ -24,11 +24,11 @@ void call(String args) {
     }
 }
 
-@Validate
-void call() {
-    if (config?.runs_on?.kubernetes) {
-        if (! config.runs_on.kubernetes.pod_template) {
-            error "Library parameter runs_on.kubernetes.pod_template is undefined"
-        }
-    }
-}
+// @Validate
+// void call() {
+//     if (config?.runs_on?.kubernetes) {
+//         if (! config.runs_on.kubernetes.pod_template) {
+//             error "Library parameter runs_on.kubernetes.pod_template is undefined"
+//         }
+//     }
+// }
