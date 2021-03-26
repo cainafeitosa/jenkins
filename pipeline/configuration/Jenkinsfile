@@ -1,4 +1,12 @@
 jenkins_runner {
-    continuous_integration() 
-    build_container_image()
+    checkout_scm()
+
+    on_commit {
+        continuous_integration()
+    }
+
+    on_merge to: develop, {
+        continuous_integration()
+        build_container_image()
+    }
 }

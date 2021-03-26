@@ -34,7 +34,5 @@ keywords{
 }
 
 @merge stages {
-    @merge continuous_integration {
-        checkout_scm
-    }
+    @merge continuous_integration {}
 }

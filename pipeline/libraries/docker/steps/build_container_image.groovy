@@ -2,16 +2,16 @@
 
 void call() {
 
-    def imageName = config.image_repository ? "${config.image_repository}/${config.image_name}" : config.image_name
-    def dockerfile = config.dockerfile ?: "Dockerfile"
-    def contextPath = config.context_path ?: "."
-    def buildArgs = []
-    config.build_args.each { argument, value ->
-        buildArgs << "--build-arg ${argument}='${value}'"
-    }
-    def buildOpts = "${buildArgs.join(" ")} -f ${dockerfile} ${contextPath}"
-
     stage("Docker: Build and Push Image") {
+        def imageName = config.image_repository ? "${config.image_repository}/${config.image_name}" : config.image_name
+        def dockerfile = config.dockerfile ?: "Dockerfile"
+        def contextPath = config.context_path ?: "."
+        def buildArgs = []
+        config.build_args.each { argument, value ->
+            buildArgs << "--build-arg ${argument}='${value}'"
+        }
+        def buildOpts = "${buildArgs.join(" ")} -f ${dockerfile} ${contextPath}"
+        
         withDocker {
             docker.withRegistry(config.registry, config.credentials_id) {
                 def builtImage = docker.build(imageName, buildOpts)
