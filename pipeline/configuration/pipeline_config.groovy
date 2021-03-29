@@ -25,16 +25,12 @@ template_methods {
 }
 
 stages {
-    build {
+    continuous_integration {
         build_artifact
         build_image
-    }
-    test {
         unit_test
         static_code_analysis
         scan_image
-    }
-    release {
         publish_image
     }
 }

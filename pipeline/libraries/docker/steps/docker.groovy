@@ -1,13 +1,15 @@
 #!/usr/bin/env groovy
 
-def call(Closure body) {
+void call(String args) {
+    def commandLine = "docker ${args}"
+
     if (config.pod_template) {
         container("docker") {
-            body()
+            sh commandLine
         }
     } else {
         docker.withTool(config.docker_installation) {
-            body()
+            sh commandLine
         }
     }
 }

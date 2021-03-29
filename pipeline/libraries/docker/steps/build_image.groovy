@@ -2,7 +2,7 @@
 
 void call() {
     stage("Build: Docker") {
-        def imageName = config.image_repository ? "${config.image_repository}/${config.image_name}" : config.image_name
+        imageName       = config.registry ?: "${config.registry}/${config.image_name}" : config.image_name
         def dockerfile  = config.dockerfile ?: "Dockerfile"
         def contextPath = config.context_path ?: "."
         def buildArgs   = []
@@ -13,9 +13,9 @@ void call() {
 
         def buildOpts = "${buildArgs.join(" ")} -f ${dockerfile} ${contextPath}"
 
-        withDocker {
-            dockerImage = docker.build(imageName, buildOpts)
-        }
+        login_to_registry()
+        docker "pull ${imageName}:latest || true"
+        docker "build --cache-from ${imageName}:latest -t ${imageName}:${env.GIT_COMMIT_SHORT} ${imageName}:latest ${buildOpts}"
     }
 }
 

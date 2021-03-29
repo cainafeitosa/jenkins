@@ -1,16 +1,12 @@
 agent {
     on_merge to: develop_branch, {
-        build()
-        test()
-        release()
+        continuous_integration()
         // helm install && helm lint && helm template
         // deploy_to dev
     }
 
     on_commit to: release_branch, {
-        build()
-        test()
-        release()
+        continuous_integration()
         // helm install && helm package && helm push
         // deploy_to test
     }
