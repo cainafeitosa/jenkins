@@ -3,7 +3,7 @@
 void call(String args) {
 
     def commandLine = "mvn -B ${config.cli_options ?: ""} ${args}"
-    def podTemplate = config.runs_on?.pod_template
+    def podTemplate = config.runs_on.pod_template
 
     if (podTemplate) {
         container("maven") {

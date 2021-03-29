@@ -1,6 +1,6 @@
 @merge libraries {
     git
-	utils
+	utility
     kubernetes_agent {
         cloud = "kubernetes"
     }
