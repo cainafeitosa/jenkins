@@ -4,10 +4,8 @@
 
 template_methods {
     package
-    build_image
     unit_test
     static_code_analysis
-    publish_image
 }
 
 @merge libraries {
