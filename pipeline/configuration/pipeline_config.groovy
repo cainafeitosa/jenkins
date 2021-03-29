@@ -49,8 +49,8 @@ application_environments {
 }
 
 keywords {
-    master_branch  =  /^[Mm]aster$/
-    develop_branch =  /^[Dd]evelop(ment|er|)$/
-    hotfix_branch  =  /^[Hh]ot[Ff]ix-/
-    release_branch =  /^[Rr]elease-(\d+.)*\d$/
+    master_branch = /^[Mm]aster$/
+    develop_branch = /^[Dd]evelop(ment\|er\|)$/
+    hotfix_branch = /^[Hh]ot[Ff]ix-/
+    release_branch = /^[Rr]elease-(d+.)*d$/
 }

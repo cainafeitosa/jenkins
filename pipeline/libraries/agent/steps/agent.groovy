@@ -11,7 +11,7 @@ void call(Closure body) {
             nodeRunner(body)
             break;
         default:
-            kubernetesRunner(body)
+            nodeRunner(body)
             break;
     }
 }
