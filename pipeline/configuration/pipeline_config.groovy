@@ -19,7 +19,6 @@ template_methods {
     git
     @merge docker {
         pod_template   = "docker"
-        registry       = "http://registry.apps.lab.local"
         credentials_id = "registry-credential"
     }
 }

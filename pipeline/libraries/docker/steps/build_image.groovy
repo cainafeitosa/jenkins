@@ -13,7 +13,7 @@ void call() {
         def buildOpts = "-t ${imageName}:${imageTag} ${buildArgs.join(" ")} -f ${dockerfile} ${contextPath}"
 
         withDocker {
-            builtImage = docker.build(imageName, buildOpts)
+            dockerImage = docker.build(imageName, buildOpts)
         }
     }
 }

@@ -2,8 +2,11 @@
 
 void call() {
     stage("Release") {
+        def registry           = config.registry ?: ""
+        def registryCredential = config.credentials_id ?: ""
+        
         withDocker {
-            docker.withRegistry(config.registry, config.credentials_id) {
+            docker.withRegistry(registry, registryCredential) {
                 try {
                     def imageCache = docker.image("${imageName}:latest")
                     imageCache.pull()
@@ -11,8 +14,8 @@ void call() {
                     println "Failed to pull image ${imageName}:latest!"
                 }
 
-                builtImage.push(imageTag)
-                builtImage.push("latest")
+                dockerImage.push(imageTag)
+                dockerImage.push("latest")
             }
         }
     }
