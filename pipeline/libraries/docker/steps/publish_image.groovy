@@ -7,13 +7,6 @@ void call() {
         
         withDocker {
             docker.withRegistry(registry, registryCredential) {
-                try {
-                    def imageCache = docker.image("${imageName}:latest")
-                    imageCache.pull()
-                } catch(ignored) {
-                    println "Failed to pull image ${imageName}:latest!"
-                }
-
                 dockerImage.push(imageTag)
                 dockerImage.push("latest")
             }

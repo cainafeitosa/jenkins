@@ -67,7 +67,7 @@ releases:
                 envVars:
                 - envVar:
                     key: "DOCKER_HOST"
-                    value: "tcp://dockerd:2375"
+                    value: "tcp://localhost:2375"
                 - envVar:
                     key: "DOCKER_TLS_CERTDIR"
                     value: ""

@@ -12,7 +12,7 @@ def call(Closure body) {
     }
 }
 
-@Validate
+@Init
 void docker_env() {
     imageName = config.image_repository ? "${config.image_repository}/${config.image_name}" : config.image_name
     imageTag  = env.GIT_COMMIT_SHORT
