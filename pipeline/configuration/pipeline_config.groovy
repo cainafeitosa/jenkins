@@ -2,10 +2,8 @@
     allow_scm_jenkinsfile = false
 }
 
-template_methods{
+template_methods {
     package
-    unit_test
-    static_code_analysis
 }
 
 @merge libraries {
