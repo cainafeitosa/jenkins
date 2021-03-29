@@ -31,8 +31,9 @@ void call() {
 }
 
 private void withDocker(Closure body) {
+    def podTemplate = config.runs_on?.pod_template
 
-    if (config.runs_on?.pod_template) {
+    if (podTemplate) {
         container("docker") {
             body()
         }
