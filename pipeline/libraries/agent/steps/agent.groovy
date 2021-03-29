@@ -15,3 +15,22 @@ void call(Closure body) {
             break;
     }
 }
+
+private void kubernetesRunner(Closure body) {
+    def cloud = config.kubernetes.cloud ?: "kubernetes"
+    def podTemplates = pipelineConfig.libraries.findAll { library, config ->
+        config.pod_template
+    }.collect { library, config ->
+        config.pod_template
+    }.join(" ")
+
+    podTemplate(cloud: cloud, inheritFrom: podTemplates) {
+        node(POD_LABEL, body)
+    }
+}
+
+private void nodeRunner(Closure body) {
+    def nodeLabel = config.node.label ?: ""
+    
+    node(nodeLabel, body)
+}
