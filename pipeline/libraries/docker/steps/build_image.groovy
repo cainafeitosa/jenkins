@@ -10,7 +10,7 @@ void call() {
             buildArgs << "--build-arg ${argument}='${value}'"
         }
 
-        def buildOpts = "-t ${imageName}:${imageTag} ${buildArgs.join(" ")} -f ${dockerfile} ${contextPath}"
+        def buildOpts = "${buildArgs.join(" ")} -f ${dockerfile} ${contextPath}"
 
         withDocker {
             dockerImage = docker.build(imageName, buildOpts)
