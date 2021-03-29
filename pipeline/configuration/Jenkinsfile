@@ -1,0 +1,22 @@
+jenkins_runner {
+    on_merge to: develop {
+        build()
+        test()
+        release()
+        // helm install && helm lint && helm template
+        // deploy_to dev
+    }
+
+    on_commit to: release {
+        build()
+        test()
+        release()
+        // helm install && helm package && helm push
+        // deploy_to test
+    }
+
+    // on_merge to: master, from: release {
+    //     approve
+    //     deploy_to prod
+    // }
+}
