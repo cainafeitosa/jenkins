@@ -1,7 +1,5 @@
-println develop_branch
 agent {
-    println jte.keywords
-    on_merge to: develop_branch {
+    on_merge to: jte.keywords.develop_branch {
         build()
         test()
         release()
@@ -9,7 +7,7 @@ agent {
         // deploy_to dev
     }
 
-    on_commit to: release_branch {
+    on_commit to: jte.keywords.release_branch {
         build()
         test()
         release()
