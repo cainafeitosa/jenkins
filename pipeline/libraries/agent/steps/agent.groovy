@@ -25,12 +25,18 @@ private void kubernetesRunner(Closure body) {
     }.join(" ")
 
     podTemplate(cloud: cloud, inheritFrom: podTemplates) {
-        node(POD_LABEL, body)
+        node(POD_LABEL) {
+            checkout_scm()
+            body()
+        }
     }
 }
 
 private void nodeRunner(Closure body) {
     def nodeLabel = config.node.label ?: ""
     
-    node(nodeLabel, body)
+    node(nodeLabel) {
+        checkout_scm()
+        body()
+    }
 }

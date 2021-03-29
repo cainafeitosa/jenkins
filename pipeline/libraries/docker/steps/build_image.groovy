@@ -50,14 +50,3 @@ void validate_docker_build() {
         error "docker library 'build_args' is a ${config.build_args.getClass()} when a block was expected"
     }
 }
-
-@Validate
-void validate_runs_on() {
-    if (!config.containsKey("runs_on")) {
-        return 
-    }
-
-    if (!(config.runs_on instanceof Map)) {
-        error "docker library 'runs_on' is a ${config.runs_on.getClass()} when a block was expected"
-    }
-}

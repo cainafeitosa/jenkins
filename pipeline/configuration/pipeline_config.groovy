@@ -3,6 +3,7 @@
 }
 
 template_methods {
+    checkout_scm
     build_artifact
     build_image
     unit_test
