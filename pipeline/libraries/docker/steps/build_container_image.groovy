@@ -16,7 +16,7 @@ void call() {
                 try {
                     def imageCache = docker.image("${imageName}:latest")
                     imageCache.pull()
-                catch(ignored) {
+                } catch(ignored) {
                     println "Failed to pull image ${imageName}:latest!"
                 }
                 def builtImage = docker.build(imageName, buildOpts)
