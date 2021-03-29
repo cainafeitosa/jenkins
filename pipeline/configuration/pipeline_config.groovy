@@ -2,10 +2,6 @@
     allow_scm_jenkinsfile = false
 }
 
-template_methods {
-    package
-}
-
 @merge libraries {
     agent
     utility
