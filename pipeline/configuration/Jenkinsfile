@@ -1,3 +1,5 @@
 agent {
+    sh 'env'
     println jte.keywords.develop_branch
+    println develop_branch
 }
