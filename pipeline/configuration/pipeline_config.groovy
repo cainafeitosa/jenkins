@@ -2,6 +2,14 @@
     allow_scm_jenkinsfile = false
 }
 
+template_methods {
+    build_artifact
+    build_image
+    unit_test
+    static_code_analysis
+    publish_image
+}
+
 @merge libraries {
     agent
     utility
@@ -15,7 +23,7 @@
 
 stages {
     build {
-        package
+        build_artifact
         build_image
     }
     test {
