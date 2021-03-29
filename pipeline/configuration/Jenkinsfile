@@ -1,4 +1,7 @@
+println develop_branch
+
 agent {
+    println jte.keywords
     on_merge to: develop_branch {
         build()
         test()

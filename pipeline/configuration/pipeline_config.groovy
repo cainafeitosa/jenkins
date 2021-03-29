@@ -12,12 +12,14 @@ template_methods {
 }
 
 @merge libraries {
-    agent
+    agent {
+        kubernetes
+    }
     utility
     git
     @merge docker {
-        pod_template = "docker"
-        registry = "http://registry.apps.lab.local"
+        pod_template   = "docker"
+        registry       = "http://registry.apps.lab.local"
         credentials_id = "registry-credential"
     }
 }
@@ -49,8 +51,9 @@ application_environments {
 }
 
 keywords {
-    master_branch = /^[Mm]aster$/
-    develop_branch = /^[Dd]evelop(ment\|er\|)$/
-    hotfix_branch = /^[Hh]ot[Ff]ix-/
-    release_branch = /^[Rr]elease-(d+.)*d$/
+    master_branch  =  /^[Mm]aster$/
+    develop_branch =  /^[Dd]evelop(ment|er|)$/ 
+    feature_branch = /^feature-.*$/
+    hotfix_branch  =  /^[Hh]ot[Ff]ix-/ 
+    release_branch =  /^[Rr]elease-(\d+.)*\d$/
 }
