@@ -17,7 +17,7 @@ void call(Closure body) {
 }
 
 private void kubernetesRunner(Closure body) {
-    def cloud = config.kubernetes.cloud ?: "kubernetes"
+    def cloud = config.kubernetes?.cloud ?: "kubernetes"
     def podTemplates = pipelineConfig.libraries.findAll { library, config ->
         config.pod_template
     }.collect { library, config ->
@@ -33,7 +33,7 @@ private void kubernetesRunner(Closure body) {
 }
 
 private void nodeRunner(Closure body) {
-    def nodeLabel = config.node.label ?: ""
+    def nodeLabel = config.node?.label ?: ""
     
     node(nodeLabel) {
         checkout_scm()
