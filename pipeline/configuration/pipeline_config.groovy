@@ -8,6 +8,7 @@ template_methods {
     build_image
     unit_test
     static_code_analysis
+    scan_image
     publish_image
 }
 
@@ -31,6 +32,7 @@ stages {
     test {
         unit_test
         static_code_analysis
+        scan_image
     }
     release {
         publish_image
