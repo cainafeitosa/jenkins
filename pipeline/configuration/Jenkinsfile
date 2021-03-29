@@ -1,5 +1,5 @@
 agent {
-    on_merge to: develop {
+    on_merge to: develop_branch {
         build()
         test()
         release()
@@ -7,7 +7,7 @@ agent {
         // deploy_to dev
     }
 
-    on_commit to: release {
+    on_commit to: release_branch {
         build()
         test()
         release()

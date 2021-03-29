@@ -41,15 +41,15 @@ application_environments {
     }
     tst {
         long_name = "Test"
-    } 
+    }
     prd {
         long_name = "Production"
     }
 }
 
 keywords {
-    master  =  /^[Mm]aster$/
-    develop =  /^[Dd]evelop(ment|er|)$/
-    hotfix  =  /^[Hh]ot[Ff]ix-/
-    release =  /^[Rr]elease-(\d+.)*\d$/
+    master_branch  =  /^[Mm]aster$/
+    develop_branch =  /^[Dd]evelop(ment|er|)$/
+    hotfix_branch  =  /^[Hh]ot[Ff]ix-/
+    release_branch =  /^[Rr]elease-(\d+.)*\d$/
 }
