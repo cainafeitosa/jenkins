@@ -2,7 +2,7 @@
 
 void call() {
 
-    stage("Docker: Build and Push Image") {
+    stage("Release: Docker") {
         def imageName = config.image_repository ? "${config.image_repository}/${config.image_name}" : config.image_name
         def dockerfile = config.dockerfile ?: "Dockerfile"
         def contextPath = config.context_path ?: "."
@@ -14,10 +14,16 @@ void call() {
         
         withDocker {
             docker.withRegistry(config.registry, config.credentials_id) {
+                try {
+                    def imageCache = docker.image("${imageName}:latest")
+                    imageCache.pull()
+                catch(ignored) {
+                    println "Failed to pull image ${imageName}:latest!"
+                }
                 def builtImage = docker.build(imageName, buildOpts)
 
-                builtImage.push("${env.BUILD_NUMBER}-${env.GIT_COMMIT_SHORT_SHA}")
-                builtImage.push('latest')
+                builtImage.push("${env.GIT_COMMIT_SHORT}")
+                builtImage.push("latest")
             }
         }
     }
@@ -26,7 +32,7 @@ void call() {
 
 private void withDocker(Closure body) {
 
-    if (config?.runs_on) {
+    if (config.runs_on?.pod_template) {
         container("docker") {
             body()
         }
@@ -47,6 +53,19 @@ void validate_docker_build() {
 
     if (!(config.build_args instanceof Map)) {
         error "docker library 'build_args' is a ${config.build_args.getClass()} when a block was expected"
+    }
+
+}
+
+@Validate
+void validate_runs_on() {
+
+    if (!config.containsKey("runs_on")) {
+        return 
+    }
+
+    if (!(config.runs_on instanceof Map)) {
+        error "docker library 'runs_on' is a ${config.runs_on.getClass()} when a block was expected"
     }
 
 }

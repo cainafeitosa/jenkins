@@ -2,11 +2,11 @@
 
 void call() {
     
-    stage("Maven: Unit Tests") {
+    stage("Test: Unit Tests") {
         def testResultsPath = config.test_results_path ?: "**/target/surefire-reports/TEST-*.xml"
         
         try {
-            mvn "clean test"
+            mvn "test"
         } finally {
             junit allowEmptyResults: true, skipPublishingChecks: true, testResults: testResultsPath
         }

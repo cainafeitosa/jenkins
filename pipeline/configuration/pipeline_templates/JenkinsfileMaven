@@ -1,0 +1,16 @@
+jenkins_runner {
+    on_commit to: develop {
+        build_artifact()
+        build_container_image()
+        // deploy_to dev
+    }
+
+    on_merge to: master, from: develop {
+        unit_test()
+        static_code_analysis()
+        build_artifact()
+        build_container_image()
+        // deploy_to test
+
+    }
+}

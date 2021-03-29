@@ -42,6 +42,8 @@ releases:
             - sonar:2.13
             - multibranch-build-strategy-extension:1.0.10
             - ws-cleanup:0.39
+            - gitlab-plugin:1.5.19
+            - gitlab-branch-source:1.5.4
         agent:
           enabled: true
           image: jenkins/inbound-agent
@@ -50,24 +52,28 @@ releases:
           podTemplates:
             docker: |-
               - name: "docker"
-                label: "jenkins-docker"
+                label: "docker"
                 containers:
                   - name: "docker"
                     image: "docker:19.03"
                     workingDir: "/home/jenkins/agent"
                     command: "sleep"
                     args: "9999999"
-                  - name: "docker-daemon"
+                  - name: "dockerd"
                     image: "docker:19.03-dind"
-                    workingDir: "/home/jenkins/agent"
+                    command: ""
+                    args: "--insecure-registry=registry.apps.lab.local"
                     privileged: true
-                volumes:
-                  - emptyDirVolume:
-                      memory: false
-                      mountPath: "/var/run"
-            maven-jdk-8: |-
-              - name: "maven-jdk-8"
-                label: "jenkins-maven"
+                envVars:
+                - envVar:
+                    key: "DOCKER_HOST"
+                    value: "tcp://dockerd:2375"
+                - envVar:
+                    key: "DOCKER_TLS_CERTDIR"
+                    value: ""
+            maven3-jdk8: |-
+              - name: "maven3-jdk8"
+                label: "maven"
                 containers:
                   - name: "maven"
                     image: "maven:3-jdk-8-alpine"
@@ -79,6 +85,38 @@ releases:
                       claimName: "maven-repo"
                       mountPath: "/root/.m2/repository"
                       readOnly: false
+            node-10: |-
+              - name: "node-10"
+                label: "node"
+                containers:
+                  - name: "node"
+                    image: "node:10-alpine"
+                    workingDir: "/home/jenkins/agent"
+                    command: "sleep"
+                    args: "9999999"
+                volumes:
+                  - persistentVolumeClaim:
+                      claimName: "npm-cache"
+                      mountPath: "/root/.npm"
+                      readOnly: false
+            sonar-scanner: |-
+              - name: "sonar-scanner"
+                label: "sonar-scanner"
+                containers:
+                  - name: "sonar-scanner"
+                    image: "sonarsource/sonar-scanner-cli:4"
+                    workingDir: "/home/jenkins/agent"
+                    command: "sleep"
+                    args: "9999999"
+            kube-tools: |-
+              - name: "kube-tools"
+                label: "kube-tools"
+                containers:
+                  - name: "kube-tools"
+                    image: "quay.io/roboll/helmfile:helm3-v0.138.7"
+                    workingDir: "/home/jenkins/agent"
+                    command: "sleep"
+                    args: "9999999"
         persistence:
           enabled: true
           storageClass: local-storage

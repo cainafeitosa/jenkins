@@ -6,7 +6,7 @@ void call(Map args = [:], body) {
     if (!env.GIT_BUILD_CAUSE.equals("merge"))
         return
 
-    env.FEATURE_SHA = get_feature_branch_sha()
+    env.GIT_FEATURE_SHA = get_feature_branch_sha()
 
     def source_branch = get_merged_from()
     def target_branch = env.BRANCH_NAME
@@ -34,7 +34,6 @@ void call(Map args = [:], body) {
 
 String get_merged_from() {
 
-    // unstash "workspace"
     // update remote for git name-rev to properly work
     def remote = env.GIT_URL
     def cred_id = env.GIT_CREDENTIAL_ID
@@ -72,7 +71,6 @@ String get_merged_from() {
 
 String get_feature_branch_sha() {
 
-    // unstash "workspace"
     sh(
         script: "git rev-parse \$(git --no-pager log -n1 | grep Merge: | awk '{print \$3}')",
         returnStdout: true

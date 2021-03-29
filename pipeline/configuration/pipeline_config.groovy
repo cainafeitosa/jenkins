@@ -1,16 +1,15 @@
-@merge jte {
-	allow_scm_jenkinsfile = false
-}
-
 @merge libraries {
-	git
+    git
+	utils
     kubernetes_agent {
         cloud = "kubernetes"
     }
-    @merge docker {
-        runs_on = "docker"
-        registry = "https://registry.apps.lab.local"
-        credentials_id = "nexus-credential"
+    docker {
+        runs_on {
+            pod_template = "docker"
+        }
+        registry = "http://registry.apps.lab.local"
+        credentials_id = "registry-credential"
     }
 }
 
@@ -26,13 +25,24 @@ application_environments {
 	}
 }
 
-keywords{
+keywords {
 	master  =  /^[Mm]aster$/
 	develop =  /^[Dd]evelop(ment|er|)$/
 	hotfix  =  /^[Hh]ot[Ff]ix-/
 	release =  /^[Rr]elease-(\d+.)*\d$/
 }
 
-@merge stages {
-    @merge continuous_integration {}
+
+stages {
+	build {
+		compile
+	}
+	test {
+		unit_test
+		// static_code_analysis
+	}
+	release {
+		build_artifact
+		build_container_image
+	}
 }
