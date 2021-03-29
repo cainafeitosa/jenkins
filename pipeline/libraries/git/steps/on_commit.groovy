@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 
-void call(Map args = [:], body) {
+void call(Map args = [:], Closure body) {
     // do nothing if not commit or pr
     if (!env.GIT_BUILD_CAUSE.equals("commit"))
         return

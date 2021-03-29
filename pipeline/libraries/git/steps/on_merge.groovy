@@ -1,6 +1,6 @@
 #!/usr/bin/env groovy
 
-void call(Map args = [:], body) {
+void call(Map args = [:], Closure body) {
     // do nothing if not merge
     if (!env.GIT_BUILD_CAUSE.equals("merge"))
         return
