@@ -1,7 +1,6 @@
 #!/usr/bin/env groovy
 
 void call(Map args = [:], body) {
-
     // do nothing if not commit or pr
     if (!env.GIT_BUILD_CAUSE.equals("commit"))
         return
@@ -15,5 +14,4 @@ void call(Map args = [:], body) {
 
     println "running because of a commit to ${branch}"
     body()
-
 }

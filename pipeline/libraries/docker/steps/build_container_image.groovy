@@ -1,7 +1,6 @@
 #!/usr/bin/env groovy
 
 void call() {
-
     stage("Release: Docker") {
         def imageName = config.image_repository ? "${config.image_repository}/${config.image_name}" : config.image_name
         def dockerfile = config.dockerfile ?: "Dockerfile"
@@ -27,13 +26,10 @@ void call() {
             }
         }
     }
-
 }
 
 private void withDocker(Closure body) {
-    def podTemplate = config.runs_on.pod_template
-
-    if (podTemplate) {
+     if (config.pod_template) {
         container("docker") {
             body()
         }
@@ -42,12 +38,10 @@ private void withDocker(Closure body) {
             body()
         }
     }
-
 }
 
 @Validate
 void validate_docker_build() {
-
     if (!config.containsKey("build_args")) {
         return 
     }
@@ -55,12 +49,10 @@ void validate_docker_build() {
     if (!(config.build_args instanceof Map)) {
         error "docker library 'build_args' is a ${config.build_args.getClass()} when a block was expected"
     }
-
 }
 
 @Validate
 void validate_runs_on() {
-
     if (!config.containsKey("runs_on")) {
         return 
     }
@@ -68,5 +60,4 @@ void validate_runs_on() {
     if (!(config.runs_on instanceof Map)) {
         error "docker library 'runs_on' is a ${config.runs_on.getClass()} when a block was expected"
     }
-
 }

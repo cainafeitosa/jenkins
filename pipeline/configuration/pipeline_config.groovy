@@ -1,13 +1,8 @@
 @merge libraries {
-    git
+	agent
 	utility
-    kubernetes_agent {
-        cloud = "kubernetes"
-    }
     @merge docker {
-        runs_on {
-            pod_template = "docker"
-        }
+		pod_template = "docker"
         registry = "http://registry.apps.lab.local"
         credentials_id = "registry-credential"
     }

@@ -1,4 +1,4 @@
-jenkins_runner {
+agent {
     on_merge to: develop {
         build()
         test()

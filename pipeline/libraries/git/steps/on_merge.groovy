@@ -1,7 +1,6 @@
 #!/usr/bin/env groovy
 
 void call(Map args = [:], body) {
-
     // do nothing if not merge
     if (!env.GIT_BUILD_CAUSE.equals("merge"))
         return
@@ -33,7 +32,6 @@ void call(Map args = [:], body) {
 }
 
 String get_merged_from() {
-
     // update remote for git name-rev to properly work
     def remote = env.GIT_URL
     def cred_id = env.GIT_CREDENTIAL_ID
@@ -66,14 +64,11 @@ String get_merged_from() {
     }
     
     return branchNames
-
 }
 
 String get_feature_branch_sha() {
-
     sh(
         script: "git rev-parse \$(git --no-pager log -n1 | grep Merge: | awk '{print \$3}')",
         returnStdout: true
     ).trim()
-
 }

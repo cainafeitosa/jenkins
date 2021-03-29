@@ -1,11 +1,9 @@
 #!/usr/bin/env groovy
 
 void call(String args) {
-
     def commandLine = "mvn -B ${config.cli_options ?: ""} ${args}"
-    def podTemplate = config.runs_on.pod_template
 
-    if (podTemplate) {
+    if (config.pod_template) {
         container("maven") {
             sh commandLine
         }
@@ -14,18 +12,4 @@ void call(String args) {
             sh commandLine
         }
     }
-
-}
-
-@Validate
-void validate_runs_on() {
-
-    if (!config.containsKey("runs_on")) {
-        return 
-    }
-
-    if (!(config.runs_on instanceof Map)) {
-        error "maven library 'runs_on' is a ${config.runs_on.getClass()} when a block was expected"
-    }
-
 }

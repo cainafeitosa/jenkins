@@ -2,6 +2,7 @@
 
 fields {
   	optional {
+        pod_template = String
 		image_repository = String
         dockerfile = String
         context_path = String
