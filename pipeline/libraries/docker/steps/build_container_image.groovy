@@ -15,7 +15,7 @@ void call() {
 
         login_to_registry()
         docker "pull ${imageName}:latest || true"
-        docker "build --cache-from ${imageName}:latest -t ${imageName}:${env.GIT_COMMIT_SHORT} ${imageName}:latest ${buildOpts}"
+        docker "build --cache-from ${imageName}:latest -t ${imageName}:${env.GIT_COMMIT_SHORT} -t ${imageName}:latest ${buildOpts}"
     }
 }
 
