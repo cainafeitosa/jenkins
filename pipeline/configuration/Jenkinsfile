@@ -1,16 +1,15 @@
 agent {
     on_merge to: develop, {
         continuous_integration()
-        deploy_to dev
+        // deploy_to dev
     }
 
     on_commit to: release, {
         continuous_integration()
-        deploy_to test
+        // deploy_to test
     }
 
     on_merge to: master, from: release, {
-        approve()
-        deploy_to prod
+        // deploy_to prod
     }
 }
