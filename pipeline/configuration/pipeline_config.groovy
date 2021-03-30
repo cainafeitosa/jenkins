@@ -5,19 +5,20 @@
 template_methods {
     checkout_scm
     build_artifact
-    build_image
+    build_container_image
     unit_test
     static_code_analysis
-    scan_image
-    publish_image
+    scan_container_image
+    publish_container_image
+    publish_helm_package
 }
 
 @merge libraries {
     agent {
         kubernetes
     }
-    utility
     git
+    utility
     @merge docker {
         pod_template   = "docker"
         credentials_id = "registry-credential"
@@ -27,11 +28,9 @@ template_methods {
 stages {
     continuous_integration {
         build_artifact
-        build_image
-        unit_test
-        static_code_analysis
-        scan_image
-        publish_image
+        parallel build_container_image, build_helm_package
+        parallel unit_test, static_code_analysis, scan_container_image
+        parallel publish_container_image publish_helm_package
     }
 }
 
@@ -39,18 +38,18 @@ application_environments {
     dev {
         long_name = "Development"
     }
-    tst {
+    test {
         long_name = "Test"
     }
-    prd {
+    prod {
         long_name = "Production"
     }
 }
 
 keywords {
-    master_branch  = /^[Mm]aster$/
-    develop_branch = /^[Dd]evelop(ment|er|)$/ 
-    feature_branch = /^feature-.*$/
-    hotfix_branch  = /^[Hh]ot[Ff]ix-/ 
-    release_branch = /^[Rr]elease-(\d+.)*\d$/
+    master  = /^[Mm]aster$/
+    develop = /^[Dd]evelop(ment|er|)$/ 
+    feature = /^feature-.*$/
+    hotfix  = /^[Hh]ot[Ff]ix-/
+    release = /^[Rr]elease-(\d+.)*\d$/
 }

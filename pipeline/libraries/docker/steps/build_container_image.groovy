@@ -2,7 +2,7 @@
 
 void call() {
     stage("Build: Docker") {
-        imageName       = config.registry ?: "${config.registry}/${config.image_name}" : config.image_name
+        imageName       = config.registry ? "${config.registry.replaceAll("http(s)?://", "")}/${config.image_name}" : config.image_name
         def dockerfile  = config.dockerfile ?: "Dockerfile"
         def contextPath = config.context_path ?: "."
         def buildArgs   = []
