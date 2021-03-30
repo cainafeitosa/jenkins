@@ -6,6 +6,7 @@ template_methods {
     checkout_scm
     build_artifact
     build_container_image
+    build_helm_package
     unit_test
     static_code_analysis
     scan_container_image
@@ -28,13 +29,9 @@ template_methods {
 stages {
     continuous_integration {
         build_artifact
-        build_container_image
-        build_helm_package
-        unit_test
-        static_code_analysis
-        scan_container_image
-        publish_container_image
-        publish_helm_package
+        parallel build_container_image, build_helm_package
+        parallel unit_test, static_code_analysis, scan_container_image
+        parallel publish_container_image, publish_helm_package
     }
 }
 
