@@ -1,17 +1,17 @@
 #!/usr/bin/env groovy
 
 void call(Map args = [:], Closure body) {
-    // do nothing if not commit or pr
-    if (!env.CI_BUILD_CAUSE.equals("commit"))
-        return
-
     def branch = env.BRANCH_NAME
+
+    // do nothing if a push tag
+    if (branch == env.TAG_NAME)
+        return
 
     // do nothing if branch doesn't match regex
     if (args.to)
     if (!(branch ==~ args.to))
         return
 
-    println "running because of a commit to ${branch}"
+    println "running because of a push to ${branch}"
     body()
 }

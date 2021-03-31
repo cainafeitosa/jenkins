@@ -14,9 +14,9 @@ void call(String args) {
     }
 }
 
-@Validate
-void docker_env_init() {
+@Init
+void init_env() {
+    def imageName = config.image ?: env.CI_PROJECT_PATH
     env.CI_REGISTRY = config.registry ? config.registry.replaceAll("^(https?://)", "") : ""
-    def imageName = config.image ?: "${env.CI_PROJECT_NAMESPACE}/${env.CI_PROJECT_NAME}"
     env.CI_REGISTRY_IMAGE = env.CI_REGISTRY ? "${env.CI_REGISTRY}/${imageName}" : imageName
 }

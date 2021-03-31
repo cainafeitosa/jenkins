@@ -1,3 +1,28 @@
-node {
-    sh "env"
+on_push to: develop, {
+    runner {
+        checkout_scm()
+        build_artifact()
+        build_container_image()
+        unit_test()
+        static_code_analysis()
+        scan_container_image()
+        publish_container_image()
+        deploy_to dev
+    }
+}
+
+on_merge_request to: master, from: develop {
+    runner {
+        checkout_scm()
+        integration_test()
+        deploy_to test
+    }
+}
+
+on_merge to: master, {
+    approve()
+    runner {
+        checkout_scm()
+        deploy_to prod
+    }
 }

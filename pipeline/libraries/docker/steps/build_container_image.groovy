@@ -12,9 +12,11 @@ void call() {
 
         def buildOpts = "${buildArgs.join(" ")} -f ${dockerfile} ${contextPath}"
 
+        env.CI_REGISTRY_IMAGE_TAG = env.CI_COMMIT_SHORT_SHA
+
         login_to_registry()
         docker "pull ${env.CI_REGISTRY_IMAGE}:latest || true"
-        docker "build --cache-from ${env.CI_REGISTRY_IMAGE}:latest -t ${env.CI_REGISTRY_IMAGE}:${env.CI_COMMIT_SHORT_SHA} -t ${env.CI_REGISTRY_IMAGE}:latest ${buildOpts}"
+        docker "build --cache-from ${env.CI_REGISTRY_IMAGE}:latest -t ${env.CI_REGISTRY_IMAGE}:${env.CI_REGISTRY_IMAGE_TAG} -t ${env.CI_REGISTRY_IMAGE}:latest ${buildOpts}"
     }
 }
 
