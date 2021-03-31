@@ -1,15 +1,3 @@
-agent {
-    on_merge to: develop, {
-        continuous_integration()
-        // deploy_to dev
-    }
-
-    on_commit to: release, {
-        continuous_integration()
-        // deploy_to test
-    }
-
-    on_merge to: master, from: release, {
-        // deploy_to prod
-    }
+node {
+    sh "env"
 }

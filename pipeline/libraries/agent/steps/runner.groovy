@@ -11,7 +11,7 @@ void call(Closure body) {
             nodeRunner(body)
             break;
         default:
-            nodeRunner(body)
+            kubernetesRunner(body)
             break;
     }
 }
@@ -26,7 +26,12 @@ private void kubernetesRunner(Closure body) {
 
     podTemplate(cloud: cloud, inheritFrom: podTemplates) {
         node(POD_LABEL) {
-            checkout_scm()
+            try { unstash "workspace" }
+            catch (ignored) { 
+                println "'workspace' stash not present. To change this behavior, ensure the 'git' library is loaded"
+                return
+            }
+
             body()
         }
     }
@@ -36,7 +41,12 @@ private void nodeRunner(Closure body) {
     def nodeLabel = config.node?.label ?: ""
     
     node(nodeLabel) {
-        checkout_scm()
+        try { unstash "workspace" }
+        catch (ignored) { 
+            println "'workspace' stash not present. To change this behavior, ensure the 'git' library is loaded"
+            return
+        }
+
         body()
     }
 }

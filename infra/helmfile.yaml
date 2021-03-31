@@ -11,7 +11,7 @@ releases:
       - controller:
           tag: "2.277.1-lts"
           javaOpts: >-
-            -Xms32m -Xmx512m
+            -Xms512m -Xmx1024m
             -XX:+UnlockExperimentalVMOptions -XX:+UseCGroupMemoryLimitForHeap -Dsun.zip.disableMemoryMapping=true
             -XX:+UseParallelGC -XX:MinHeapFreeRatio=5 -XX:MaxHeapFreeRatio=10 -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90
           JCasC:
@@ -34,6 +34,7 @@ releases:
             - git:4.7.0
             - configuration-as-code:1.47
             - matrix-auth:2.6.6
+            - blueocean:1.24.5
             - kubernetes-credentials-provider:0.17
             - multibranch-scan-webhook-trigger:1.0.5
             - generic-webhook-trigger:1.72

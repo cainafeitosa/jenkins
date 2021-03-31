@@ -2,10 +2,10 @@
 
 void call(Map args = [:], Closure body) {
     // do nothing if not merge
-    if (!env.GIT_BUILD_CAUSE.equals("merge"))
+    if (!env.CI_BUILD_CAUSE.equals("merge"))
         return
 
-    env.GIT_FEATURE_SHA = get_feature_branch_sha()
+    env.CI_FEATURE_COMMIT_SHA = get_feature_branch_sha()
 
     def source_branch = get_merged_from()
     def target_branch = env.BRANCH_NAME
@@ -32,25 +32,28 @@ void call(Map args = [:], Closure body) {
 }
 
 String get_merged_from() {
-    // update remote for git name-rev to properly work
-    def remote = env.GIT_URL
-    def cred_id = env.GIT_CREDENTIAL_ID
-    withCredentials([usernamePassword(credentialsId: cred_id, passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-        remote = remote.replaceFirst("://", "://${USER}:${PASS}@")
-        sh "git remote rm origin"
-        sh "git remote add origin ${remote}"
-        sh "git fetch --all > /dev/null 2>&1"
-    }
-    // list all shas, but trim the first two shas
-    // the first sha is the current commit
-    // the second sha is the current commit's parent
-    def sourceShas = sh(
+    node {
+        unstash "workspace"
+
+        // update remote for git name-rev to properly work
+        def remote = env.CI_PROJECT_URL
+        def cred_id = env.CI_PROJECT_CREDENTIAL_ID
+        withCredentials([usernamePassword(credentialsId: cred_id, passwordVariable: 'PASS', usernameVariable: 'USER')]){
+            remote = remote.replaceFirst("://", "://${USER}:${PASS}@")
+            sh "git remote rm origin"
+            sh "git remote add origin ${remote}"
+            sh "git fetch --all > /dev/null 2>&1"
+        }
+        // list all shas, but trim the first two shas
+        // the first sha is the current commit
+        // the second sha is the current commit's parent
+        def sourceShas = sh(
         script: "git rev-list HEAD --parents -1",
         returnStdout: true
-    ).trim().split(" ")[2..-1]
-    def branchNames = []
-    // loop through all shas and attempt to turn them into branch names
-    for(sha in sourceShas) {
+        ).trim().split(" ")[2..-1]
+        def branchNames = []
+        // loop through all shas and attempt to turn them into branch names
+        for(sha in sourceShas) {
         def branch = sh(
             script: "git name-rev --name-only " + sha,
             returnStdout: true
@@ -61,9 +64,9 @@ String get_merged_from() {
             branch = branch.substring(0, branch.lastIndexOf("~"))
         if(!branch.contains("^"))
             branchNames.add(branch)
+        }
+        return branchNames
     }
-    
-    return branchNames
 }
 
 String get_feature_branch_sha() {

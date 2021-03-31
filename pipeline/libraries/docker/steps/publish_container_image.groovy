@@ -1,8 +1,9 @@
 #!/usr/bin/env groovy
 
 void call() {
-    stage("Release") {
-        docker "push ${imageName}:${env.GIT_COMMIT_SHORT}"
-        docker "push ${imageName}:latest"
+    stage("Publish") {
+        login_to_registry()
+        docker "push ${env.CI_REGISTRY_IMAGE}:${env.CI_COMMIT_SHORT_SHA}"
+        docker "push ${env.CI_REGISTRY_IMAGE}:latest"
     }
 }

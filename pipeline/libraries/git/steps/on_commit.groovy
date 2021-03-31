@@ -2,7 +2,7 @@
 
 void call(Map args = [:], Closure body) {
     // do nothing if not commit or pr
-    if (!env.GIT_BUILD_CAUSE.equals("commit"))
+    if (!env.CI_BUILD_CAUSE.equals("commit"))
         return
 
     def branch = env.BRANCH_NAME

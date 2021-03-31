@@ -2,7 +2,6 @@
 
 void call() {
     stage("Build: Docker") {
-        imageName       = config.registry ? "${config.registry.replaceAll("http(s)?://", "")}/${config.image_name}" : config.image_name
         def dockerfile  = config.dockerfile ?: "Dockerfile"
         def contextPath = config.context_path ?: "."
         def buildArgs   = []
@@ -14,8 +13,8 @@ void call() {
         def buildOpts = "${buildArgs.join(" ")} -f ${dockerfile} ${contextPath}"
 
         login_to_registry()
-        docker "pull ${imageName}:latest || true"
-        docker "build --cache-from ${imageName}:latest -t ${imageName}:${env.GIT_COMMIT_SHORT} -t ${imageName}:latest ${buildOpts}"
+        docker "pull ${env.CI_REGISTRY_IMAGE}:latest || true"
+        docker "build --cache-from ${env.CI_REGISTRY_IMAGE}:latest -t ${env.CI_REGISTRY_IMAGE}:${env.CI_COMMIT_SHORT_SHA} -t ${env.CI_REGISTRY_IMAGE}:latest ${buildOpts}"
     }
 }
 
