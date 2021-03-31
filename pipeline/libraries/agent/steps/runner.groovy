@@ -1,7 +1,7 @@
 #!/usr/bin/env groovy
 
 void call(Closure body) {
-    def agentRunner = config.size() == 0 ? null : config.keySet().first()
+    def agentRunner = (config.size() == 0) ? null : config.keySet().first()
 
     switch (agentRunner) {
         case "kubernetes":
@@ -33,5 +33,4 @@ private void nodeRunner(Closure body) {
     def nodeLabel = config.node?.label ?: ""
     
     node(nodeLabel, body)
-    }
 }
