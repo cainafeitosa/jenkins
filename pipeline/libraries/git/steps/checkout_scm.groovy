@@ -21,7 +21,7 @@ void call() {
         env.CI_PROJECT_URL = scm.getUserRemoteConfigs()[0].getUrl()
         env.CI_PROJECT_CREDENTIAL_ID = scm.getUserRemoteConfigs()[0].credentialsId.toString()
 
-        def matcher = env.CI_PROJECT_URL =~ /^((?<protocol>https?|ssh)(:\/\/)|(?<user>[\w\d\._]+)@)(?<domain>[a-zA-Z0-9\.\-_]+(?<port>:[0-9]+)?)(:|\/)(?<namespace>[a-zA-Z0-9\-\/]+)\/(?<project>[a-zA-Z0-9\-]+)(\.git)?/
+        def matcher = env.CI_PROJECT_URL =~ /^((?<protocol>https?|ssh)(\:\/\/)|(?<user>[\w\d\._]+)@)(?<domain>[a-zA-Z0-9\.\-_]+(?<port>:[0-9]+)?)(\:|\/)(?<namespace>[a-zA-Z0-9\-\/]+)\/(?<project>[a-zA-Z0-9\-]+)(\.git)?/
 
         if (matcher.matches()) {
             env.CI_PROJECT_NAME = matcher.group("project") - ".git"
