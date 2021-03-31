@@ -11,7 +11,7 @@ on_push to: develop, {
     }
 }
 
-on_merge_request to: master, from: develop {
+on_merge_request to: master, from: develop, {
     runner {
         checkout_scm()
         integration_test()
