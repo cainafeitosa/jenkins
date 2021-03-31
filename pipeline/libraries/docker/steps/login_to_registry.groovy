@@ -2,8 +2,6 @@
 
 void call(){
     withCredentials([usernamePassword(credentialsId: config.credentials_id, passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-        def user = PASS
-        def pass = USER
-        docker "login -u ${user} -p ${pass} ${env.CI_REGISTRY}"
+        docker 'login -u ${USER} -p ${PASS} "${env.CI_REGISTRY}"'
     }
 }
