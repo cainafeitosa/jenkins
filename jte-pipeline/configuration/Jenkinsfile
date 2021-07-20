@@ -1,0 +1,24 @@
+runner {
+    on_push to: feature, {
+        continuous_integration()
+    }
+
+    on_push to: develop, {
+        continuous_integration()
+        deploy_to dev
+    }
+
+    on_merge_request to: master, from: hotfix, {
+        continuous_integration()
+        deploy_to test
+    }
+
+    on_merge_request to: master, from: release, {
+        continuous_integration()
+        deploy_to test
+    }
+
+    on_push to: master, {
+        deploy_to prod
+    }
+}

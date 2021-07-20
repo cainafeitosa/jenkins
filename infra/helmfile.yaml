@@ -1,0 +1,262 @@
+---
+repositories:
+  - name: jenkins
+    url: https://charts.jenkins.io
+
+releases:
+  - name: jenkins-lts
+    namespace: jenkins
+    chart: jenkins/jenkins
+    version: 3.4.0
+    values:
+      - controller:
+          tag: "2.289.2-lts-jdk11"
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "2Gi"
+            limits:
+              cpu: "2000m"
+              memory: "4Gi"
+          containerEnv:
+            - name: TZ
+              value: America/Sao_Paulo
+          javaOpts: >-
+            -Xms2g -Xmx2g
+            -XX:+AlwaysPreTouch -XX:+UseG1GC -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled
+            -XX:+DisableExplicitGC -XX:+UnlockExperimentalVMOptions -XX:+UnlockDiagnosticVMOptions
+          csrf:
+            defaultCrumbIssuer:
+              enabled: true
+              proxyCompatability: false
+          installPlugins:
+            - kubernetes
+            - workflow-aggregator
+            - git
+            - configuration-as-code
+            - matrix-auth
+            - authorize-project
+            - blueocean
+            - multibranch-scan-webhook-trigger
+            - generic-webhook-trigger
+            - templating-engine
+            - docker-workflow
+            - sonar
+            - multibranch-build-strategy-extension
+            - ws-cleanup
+            - gitlab-branch-source
+            - pipeline-utility-steps
+            - ansicolor
+            - timestamper
+            - active-directory
+            - config-file-provider
+            - Office-365-Connector
+            - http_request
+          additionalSecrets:
+            - name: "CASC_LDAP_CONFIG_BIND_PASSWORD"
+              value: "password"
+            - name: "CASC_CREDENTIALS_GITLAB"
+              value: "password"
+            - name: "CASC_CREDENTIALS_GITLAB_PERSONAL_ACCESS_TOKEN"
+              value: "token"
+            - name: "CASC_GITLAB_CONFIG_WEBHOOK_TOKEN"
+              value: "token"
+            - name: "CASC_CREDENTIALS_NEXUS"
+              value: "password"
+            - name: "CASC_CREDENTIALS_KUBERNETES_USER_TOKEN"
+              value: "token"
+          JCasC:
+            defaultConfig: true
+            configScripts:
+              custom-config: |-
+                jenkins:
+                  noUsageStatistics: "true"
+                credentials:
+                  system:
+                    domainCredentials:
+                      - credentials:
+                          - usernamePassword:
+                              id: "gitlab"
+                              password: "${CASC_CREDENTIALS_GITLAB}"
+                              scope: GLOBAL
+                              username: "jenkins"
+                          - usernamePassword:
+                              id: "nexus"
+                              password: "${CASC_CREDENTIALS_NEXUS}"
+                              scope: GLOBAL
+                              username: "jenkins"
+                          - gitlabPersonalAccessToken:
+                              description: "Personal Access Token for user jenkins"
+                              id: "gitlab-personal-access-token"
+                              scope: GLOBAL
+                              token: "${CASC_CREDENTIALS_GITLAB_PERSONAL_ACCESS_TOKEN}"
+                          - string:
+                              description: "Kubernetes User Token for user jenkins"
+                              id: "kubernetes-user-token"
+                              scope: GLOBAL
+                              secret: "${CASC_CREDENTIALS_KUBERNETES_USER_TOKEN}"
+                unclassified:
+                  globalConfigFiles:
+                    configs:
+                      - mavenSettings:
+                          comment: "User settings"
+                          content: |
+                            <settings>
+                              <servers>
+                              </servers>
+                              <mirrors>
+                                <mirror>
+                                  <id>nexus</id>
+                                  <mirrorOf>*</mirrorOf>
+                                  <url>https://nexus.example.com.br/repository/maven-public/</url>
+                                </mirror>
+                              </mirrors>
+                              <activeProfiles>
+                                <activeProfile>nexus</activeProfile>
+                              </activeProfiles>
+                              <profiles>
+                                <profile>
+                                  <id>nexus</id>
+                                <repositories>
+                                <repository>
+                                  <id>nexus</id>
+                                  <url>https://nexus.example.com.br/repository/maven-public/</url>
+                                  <snapshots>
+                                    <enabled>true</enabled>
+                                  </snapshots>
+                                  <releases>
+                                  <enabled>true</enabled>
+                                  </releases>
+                                </repository>
+                                </repositories>
+                                  <pluginRepositories>
+                                  <pluginRepository>
+                                  <id>nexus</id>
+                                  <url>https://nexus.example.com.br/repository/maven-public/</url>
+                                  <snapshots>
+                                  <enabled>true</enabled>
+                                  </snapshots>
+                                  <releases>
+                                  <enabled>true</enabled>
+                                  </releases>
+                                  </pluginRepository>
+                                </pluginRepositories>
+                                </profile>
+                              </profiles>
+                            </settings>
+                          id: "maven-settings"
+                          isReplaceAll: true
+                          name: "maven-settings"
+                          providerId: "org.jenkinsci.plugins.configfiles.maven.MavenSettingsConfig"
+                          serverCredentialMappings:
+                            - credentialsId: "nexus"
+                              serverId: "nexus"
+                  globalDefaultFlowDurabilityLevel:
+                    durabilityHint: PERFORMANCE_OPTIMIZED
+                  gitLabServers:
+                    servers:
+                      - credentialsId: "gitlab-personal-access-token"
+                        manageWebHooks: true
+                        name: "gitlab"
+                        secretToken: "${CASC_GITLAB_CONFIG_WEBHOOK_TOKEN}"
+                        serverUrl: "https://gitlab.com.br"
+                  templateGlobalConfig:
+                    tier:
+                      configurationProvider:
+                        scm:
+                          baseDir: "configuration"
+                          scm:
+                            git:
+                              branches:
+                                - name: "*/master"
+                              buildChooser: "default"
+                              userRemoteConfigs:
+                                - credentialsId: "gitlab"
+                                  url: "https://github.com.br/cainafeitosa/jte-pipeline.git"
+                      librarySources:
+                        - libraryProvider:
+                            scm:
+                              baseDir: "libraries"
+                              scm:
+                                git:
+                                  branches:
+                                  - name: "*/master"
+                                  buildChooser: "default"
+                                  userRemoteConfigs:
+                                  - credentialsId: "gitlab"
+                                    url: "https://github.com.br/cainafeitosa/jte-pipeline.git"
+                security:
+                  queueItemAuthenticator:
+                    authenticators:
+                      - global:
+                          strategy: "triggeringUsersAuthorizationStrategy"
+            securityRealm: |-
+              activeDirectory:
+                customDomain: true
+                domains:
+                  - bindName: "ldap"
+                    bindPassword: "${CASC_LDAP_CONFIG_BIND_PASSWORD}"
+                    name: "ldap.example.com.br"
+                    servers: "ldap.example.com.br:389"
+                    tlsConfiguration: TRUST_ALL_CERTIFICATES
+                groupLookupStrategy: RECURSIVE
+                removeIrrelevantGroups: true
+                cache:
+                  size: 500
+                  ttl: 600
+                startTls: true
+                internalUsersDatabase:
+                  jenkinsInternalUser: "admin"
+            authorizationStrategy: |-
+              projectMatrix:
+                permissions:
+                  - "Overall/Administer:admin"
+          sidecars:
+            configAutoReload:
+              resources:
+                requests:
+                  cpu: 50m
+                  memory: 50Mi
+                limits:
+                  cpu: 100m
+                  memory: 100Mi
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                - matchExpressions:
+                  - key: node-role.kubernetes.io/cicd
+                    operator: In
+                    values:
+                    - "true"
+          tolerations:
+            - key: "node-role.kubernetes.io/cicd"
+              operator: "Equal"
+              value: "true"
+              effect: "NoSchedule"
+          ingress:
+            enabled: true
+            hostName: jenkins.example.com.br
+        agent:
+          enabled: true
+          jenkinsTunnel: "jenkins-agent:50000"
+          jenkinsUrl: "http://jenkins.jenkins.svc.cluster.local:8080/"
+          image: jenkins/inbound-agent
+          workingDir: "/home/jenkins/agent"
+          nodeSelector:
+            buildexecutor: "true"
+          yamlTemplate: |-
+            apiVersion: v1
+            kind: Pod
+            spec:
+              tolerations:
+                - key: "node-role.kubernetes.io/cicd"
+                  operator: "Equal"
+                  value: "true"
+                  effect: "NoSchedule"
+        persistence:
+          enabled: true
+          storageClass: nfs-client
+          size: "10Gi"
+        rbac:
+          readSecrets: true

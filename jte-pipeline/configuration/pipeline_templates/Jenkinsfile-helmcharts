@@ -1,0 +1,7 @@
+runner {
+    on_push to: master, {
+        build_helm_package()
+        helm_lint()
+        publish_helm_package()
+    }
+}
